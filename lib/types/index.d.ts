@@ -1,0 +1,87 @@
+import { FormikProps, FormikErrors, FormikTouched } from "formik";
+
+//tipos de datos para la app
+export type AuthContextProps = {
+  auth: User | null;
+  login: (userData: User) => void;
+  logout: () => void;
+};
+
+//Datos de respuesta
+export type ResponseData = {
+  message?: string;
+  data?: any;
+  success: boolean;
+};
+
+//Datos del login
+export type LoginData = {
+  userName: string;
+  password: string;
+};
+
+//Roles del sistema
+export type UserRole =
+  | 0 //Administrador
+  | 1 //Bodeguero
+  | 2 //Administrador de producto
+  | 3 //Empacador
+  | 4 //Secretaria
+  | 5 //Gerente
+
+//Datos de los usuarios
+export type User = {
+  id?: string;
+  userName: string;
+  password?: string;
+  name: string;
+  email: string;
+  department: string;
+  role: UserRole;
+  identificationCard: string;
+  dateBirth: string;
+  age: number;
+};
+
+export type CloudImage = {
+  secure_url: string;
+};
+
+//backups
+export type Backup = {
+  id?: string;
+};
+
+//Auditoria del sistema
+export type Auditory = {
+  id?: string;
+  date: string;
+  user: string;
+  action: string;
+};
+
+export interface ModalProps<T> {
+  visible: boolean;
+  close: () => void;
+  onDone?: (data?: T) => void | Promise<void>;
+}
+
+export interface FormikComponentProps<T = Element> extends FormikProps<T> {
+  formik: {
+    values: T;
+    handleChange: {
+      (e: ChangeEvent<any>): void;
+      <T_1 = string | ChangeEvent<T>>(field: T_1): T_1 extends ChangeEvent<T>
+        ? void
+        : (e: string | ChangeEvent<T>) => void;
+    };
+    touched: FormikTouched<T>;
+    errors: FormikErrors<T>;
+    setFieldValue: (
+      field: string,
+      value: T,
+      shouldValidate?: boolean
+    ) => Promise<void> | Promise<FormikErrors<T>>;
+    setFieldError: (field: string, value: string) => void;
+  };
+}
