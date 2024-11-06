@@ -58,7 +58,7 @@ export default function Home() {
                 fontWeight: "bold",
               }}
             >
-              <strong>Sistema de Gestión Logística </strong> |{" "}
+              <strong>Sistema de Gestión Logística</strong> |{" "}
               <em
                 style={{
                   color: "#bb22dd",
