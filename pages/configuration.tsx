@@ -1,9 +1,7 @@
 import React from "react";
 import TabContainer, { TabPanel } from "../lib/components/tab_container";
-import ProvidersPanel from "../lib/layouts/config/provider";
 import UsersPanel from "../lib/layouts/config/users";
 import RoleLayout from "../lib/layouts/role_layout";
-import Banks from "../lib/layouts/config/banks";
 import Sidebar from "../lib/components/sidebar";
 
 const Configuration = () => {
@@ -11,15 +9,6 @@ const Configuration = () => {
     {
       name: "Usuarios",
       content: <UsersPanel />,
-    },
-
-    {
-      name: "Proveedores",
-      content: <ProvidersPanel />,
-    },
-    {
-      name: "Bancos",
-      content: <Banks />,
     },
   ];
 
