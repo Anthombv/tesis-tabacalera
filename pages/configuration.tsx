@@ -12,15 +12,6 @@ const Configuration = () => {
       name: "Usuarios",
       content: <UsersPanel />,
     },
-
-    {
-      name: "Proveedores",
-      content: <ProvidersPanel />,
-    },
-    {
-      name: "Bancos",
-      content: <Banks />,
-    },
   ];
 
   return (
@@ -31,7 +22,12 @@ const Configuration = () => {
         <div className="md:w-1/6 max-w-none">
           <Sidebar />
         </div>
-        <div className="w-12/12 md:w-5/6 flex items-center justify-center">
+        <div
+          className="w-12/12 md:w-5/6 h-screen flex items-center justify-center"
+          style={{
+            background: "#EED77B",
+          }}
+        >
           <div className="w-11/12 bg-white my-14">
             <div className="grid grid-cols-1 md:grid-cols-1 gap-4 m-2">
               <TabContainer

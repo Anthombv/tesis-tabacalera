@@ -27,7 +27,7 @@ export type UserRole =
   | 2 //Administrador de producto
   | 3 //Empacador
   | 4 //Secretaria
-  | 5 //Gerente
+  | 5; //Gerente
 
 //Datos de los usuarios
 export type User = {
@@ -43,8 +43,40 @@ export type User = {
   age: number;
 };
 
-export type CloudImage = {
-  secure_url: string;
+export type Estados = En_proceso | Pendiente | Terminado | Rechazado;
+
+export type Comentario = {
+  id?: string
+  usuario: User
+  mensaje: string
+}
+
+export type Cajas = {
+  id?: string;
+  NumeroDeCaja: number;
+  corte: string;
+  lote: string;
+  variedad: string;
+  cantidad: number;
+  anioCosecha: number;
+  pesoBruto: number;
+  pesoNeto: number;
+  calidad: string;
+  valor: number;
+  cometarios: Array<Comentario>;
+};
+
+export type Solicitude = {
+  id?: string;
+  fecha: string;
+  solicitante: User;
+  cajas: Array<Cajas>;
+  estadoEmpacador: Estados;
+  EstadoAdministrador: Estados;
+  EstadoBodeguero: Estados;
+  EstadoMulling: Estados;
+  EstadoSupervisor: Estados;
+  ValorTotal: number;
 };
 
 //backups

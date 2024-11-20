@@ -55,7 +55,7 @@ const Sidebar = () => {
           </p>
           <div className="flex flex-col justify-start items-center">
             <Image
-              src="/logo.jpeg"
+              src="/logoempresa.jpeg"
               alt="Picture of the author"
               width={170}
               height={170}
@@ -86,6 +86,31 @@ const Sidebar = () => {
                 </Link>
               </div>
             </div>
+
+            {CheckPermissions(auth, [0]) && (
+              <div>
+                {mostrarCarga && (
+                  <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-white z-50">
+                    <Image
+                      src="/logo.jpeg"
+                      alt="Cargando..."
+                      width={200}
+                      height={200}
+                    />
+                  </div>
+                )}
+                <Link href="/configuration">
+                  <button className="w-full" onClick={handleChanges}>
+                    <div className="flex mb-2 justify-start items-center gap-4 px-5 hover:bg-gray-900 p-2 rounded-full group cursor-pointer hover:shadow-lg m-auto">
+                      <MdOutlineSettings className="text-2xl text-gray-600 group-hover:text-white" />
+                      <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">
+                        Configuración
+                      </h3>
+                    </div>
+                  </button>
+                </Link>
+              </div>
+            )}
 
             <div className="my-4">
               <button onClick={handleLogout}>

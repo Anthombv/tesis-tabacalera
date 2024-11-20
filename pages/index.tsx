@@ -43,48 +43,48 @@ export default function Home() {
         <div className="md:w-1/6 max-w-none">
           <Sidebar />
         </div>
-        <div className="w-12/12 md:w-5/6 bg-gradient-to-br from-slate-200 via-slate-300 to-slate-400">
-          <div
-            className="mt-6 "
-            style={{ display: "flex", alignItems: "center" }}
-          >
-            <p
-              className="md:text-4xl text-xl text-center m-6"
-              style={{
-                display: "inline-block",
-                color: "#610d9a",
-                padding: "12px",
-                fontSize: "40px",
-                fontWeight: "bold",
-              }}
+        <div
+          className="w-12/12 md:w-5/6"
+          style={{
+            background: "#EED77B",
+          }}
+        >
+          <div className="bg-white w-5/6 h-5/6 mx-auto">
+            <div
+              className="mt-6 "
+              style={{ display: "flex", alignItems: "center" }}
             >
-              <strong>Sistema de Gestión Logística </strong> |{" "}
-              <em
+              <p
+                className="md:text-4xl text-xl text-center m-6"
                 style={{
-                  color: "#bb22dd",
-                  fontStyle: "normal",
-                  fontSize: "26px",
+                  display: "inline-block",
+                  color: "#610d9a",
+                  padding: "12px",
+                  fontSize: "40px",
+                  fontWeight: "bold",
                 }}
               >
-                "Tabacalera J&Q S.A.S."
-              </em>
-              <hr
-                className="mt-0 ml-0 "
-                style={{
-                  width: "100%",
-                  height: "3px",
-                  backgroundColor: "#fff",
-                }}
-              />
-            </p>
-
-            <img
-              src="/hora2.png"
-              alt="Imagen"
-              style={{ width: "70px", height: "70px" }}
-            />
+                <strong>Sistema de Gestión Logística </strong> |{" "}
+                <em
+                  style={{
+                    color: "#bb22dd",
+                    fontStyle: "normal",
+                    fontSize: "26px",
+                  }}
+                >
+                  "Tabacalera J&Q S.A.S."
+                </em>
+                <hr
+                  className="mt-0 ml-0 "
+                  style={{
+                    width: "100%",
+                    height: "3px",
+                    backgroundColor: "#fff",
+                  }}
+                />
+              </p>
+            </div>
           </div>
-         
         </div>
       </div>
 
