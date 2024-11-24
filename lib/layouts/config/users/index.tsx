@@ -62,30 +62,28 @@ const UsersPanel = () => {
       caption: "Cedula o RUC",
     },
     {
-      dataField: "department",
-      caption: "Departamento",
-    },
-    {
-      dataField: "position",
-      caption: "Cargo o Puesto",
-    },
-    {
       dataField: "role",
       caption: "Rol",
       cellRender: ({ text }: any) => {
         switch (text) {
           case "0":
-            return "Administrador";
+            return "AdministradorSistema";
           case "1":
-            return "Ventas";
+            return "Curador";
           case "2":
-            return "Jefe de ventas";
+            return "Empacador";
           case "3":
-            return "Contabilidad";
+            return "Administrador";
           case "4":
-            return "Gerente";
+            return "Bodeguero";
           case "5":
-            return "Financiero";
+            return "Mulling";
+          case "6":
+            return "Supervisor";
+          case "7":
+            return "Secretaria";
+          case "8":
+            return "Gerente";
           default:
             return "";
         }

@@ -79,7 +79,7 @@ const UserModal = (props: Props) => {
               style={{ color: theme.colors.red }}
               className="text-center text-xl mb-2 font-semibold"
             >
-              Crear Nuevo Usuario
+              Editar Usuario
             </div>
             <hr />
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-3">
@@ -180,39 +180,7 @@ const UserModal = (props: Props) => {
                   value={formik.values.email}
                 />
               </div>
-              
-              <div>
-                <label className="text-gray-700 text-sm font-bold mb-2">
-                  Departamento
-                </label>
 
-                <select
-                  className="border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  aria-label="Default select department"
-                  name="department"
-                  onChange={formik.handleChange}
-                  value={formik.values?.department ?? ""}
-                >
-                  <option>Seleccione un Departamento</option>
-                  <option value="CONTABILIDAD">CONTABILIDAD</option>
-                  <option value="ASISTENCIA GERENCIA">
-                    ASISTENCIA GERENCIA
-                  </option>
-                  <option value="GERENCIA">GERENCIA</option>
-                  <option value="GESTION Y CREDITO">GESTION Y CREDITO</option>
-                  <option value="MARKETING">MARKETING</option>
-                  <option value="MENSAJERIA">MENSAJERIA</option>
-                  <option value="PRODUCCION">PRODUCCIÓN</option>
-                  <option value="RECEPCION">RECEPCIÓN</option>
-                  <option value="SERVICIOS GENERALES">
-                    SERVICIOS GENERALES
-                  </option>
-                  <option value="SISTEMAS">SISTEMAS</option>
-                  <option value="SOCIOS">SOCIOS</option>
-                  <option value="VENTAS">VENTAS</option>
-                </select>
-              </div>
-              
               <div>
                 <label className="text-gray-700 text-sm font-bold mb-2">
                   Tipo de Rol
@@ -226,12 +194,14 @@ const UserModal = (props: Props) => {
                   value={formik.values.role}
                   defaultValue={1}
                 >
-                  <option value={1}>1</option>
-                  <option value={2}>2</option>
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                  <option value={5}>5</option>
-                  <option value={6}>6</option>
+                  <option value={1}>Curador</option>
+                  <option value={2}>Empacador</option>
+                  <option value={3}>Administrador</option>
+                  <option value={4}>Bodeguero</option>
+                  <option value={5}>Mulling</option>
+                  <option value={6}>Supervisor</option>
+                  <option value={7}>Secretaria</option>
+                  <option value={8}>Gerente</option>
                 </select>
               </div>
             </div>

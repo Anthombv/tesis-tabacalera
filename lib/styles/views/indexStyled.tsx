@@ -6,7 +6,7 @@ export const StateField = (props: Props) => {
   let color = "white";
 
   switch (props.state) {
-    case "Aprobado":
+    case "Terminado":
       color = "rgb(193 243 190)";
       //color = "#86efac";
       break;
@@ -16,7 +16,7 @@ export const StateField = (props: Props) => {
     case "Elaborando":
       //color = "#ffdd9e";
       //color = "#fde68a";
-      color = "#fecdd3" ;
+      color = "#fecdd3";
       break;
     case "Pendiente":
       color = "#ffdd9e";
@@ -29,7 +29,7 @@ export const StateField = (props: Props) => {
       break;
     case "Rechazado":
       //color = "#b78c8a";
-      color = "#fb7185";      
+      color = "#fb7185";
       break;
   }
 
@@ -42,7 +42,7 @@ export const StateField = (props: Props) => {
         fontSize: "10px",
         margin: 1,
         borderRadius: "8px",
-        fontWeight: "600"
+        fontWeight: "600",
       }}
     >
       {props.state.toUpperCase()}

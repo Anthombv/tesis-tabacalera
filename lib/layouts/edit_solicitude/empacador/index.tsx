@@ -18,7 +18,7 @@ type Props = {
   inTabs?: boolean;
 };
 
-const SoliciterPanel = (props: Props) => {
+const EmpacadorPanel = (props: Props) => {
   const { auth } = useAuth();
   const formik: FormikComponentProps<Solicitude> = props.formik;
   const { sm, md, lg, xl, inTabs } = props;
@@ -29,17 +29,17 @@ const SoliciterPanel = (props: Props) => {
           className={inTabs ? "ml-5 mt-3" : ""}
           style={{ color: "black" }}
         >
-          Estado de Solicitante
+          Estado de empacador
         </Form.Label>
         <Form.Select
-          name="estadoCurador"
+          name="estadoEmpacador"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          value={formik.values?.estadoCurador}
+          value={formik.values?.estadoEmpacador}
           onChange={formik.handleChange}
           disabled={CheckFinished(
             auth,
-            [1],
-            formik.values?.estadoCurador,
+            [2],
+            formik.values?.estadoEmpacador,
             Aprobado
           )}
         >
@@ -52,4 +52,4 @@ const SoliciterPanel = (props: Props) => {
   );
 };
 
-export default SoliciterPanel;
+export default EmpacadorPanel;

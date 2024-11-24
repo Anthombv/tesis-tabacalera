@@ -1,8 +1,5 @@
 import mongoose, { mongo, Schema } from "mongoose";
-import {
-  Auditory,
-  User,
-} from "../types";
+import { Auditory, Backup, Cajas, Comentario, Solicitude, User } from "../types";
 
 const UserSchema = new mongoose.Schema<User>(
   {
@@ -31,6 +28,116 @@ UserSchema.set("toJSON", {
 
 export const UserModel =
   mongoose.models.Users || mongoose.model("Users", UserSchema);
+
+const ComentarioSchema = new mongoose.Schema<Comentario>(
+  {
+    //Solicitante
+    usuario: { type: UserSchema },
+    mensaje: { type: String },
+  },
+  { timestamps: true }
+);
+
+// Duplicate the ID field.
+ComentarioSchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are serialised.
+ComentarioSchema.set("toJSON", {
+  virtuals: true,
+});
+
+const CajasSchema = new mongoose.Schema<Cajas>(
+  {
+    //Solicitante
+    NumeroDeCaja: { type: Number },
+    corte: { type: String },
+    lote: { type: String },
+    variedad: { type: String },
+    cantidad: { type: Number },
+    anioCosecha: { type: Number },
+    pesoBruto: { type: Number },
+    pesoNeto: { type: Number },
+    valor: { type: Number },
+    calidad: { type: String },
+    casona: { type: String },
+    aposento: { type: String },
+    cometarios: { type: [ComentarioSchema] },
+  },
+  { timestamps: true }
+);
+
+// Duplicate the ID field.
+CajasSchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are serialised.
+CajasSchema.set("toJSON", {
+  virtuals: true,
+});
+
+const SolicitudeSchema = new mongoose.Schema<Solicitude>(
+  {
+    number: { type: Number },
+    fecha: { type: String },
+    solicitante: { type: String },
+    informacionCurador: { type: String },
+    cajas: { type: [CajasSchema] },
+    estadoCurador: { type: String },
+    estadoEmpacador: { type: String },
+    EstadoAdministrador: { type: String },
+    EstadoBodeguero: { type: String },
+    EstadoMulling: { type: String },
+    EstadoSupervisor: { type: String },
+  },
+  { timestamps: true }
+);
+
+// Duplicate the ID field.
+SolicitudeSchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+
+// Calculate total from factures.
+SolicitudeSchema.virtual("total").get(function () {
+  let total = 0;
+  this.cajas.forEach((element: Cajas) => (total += element.valor ?? 0));
+  return total;
+});
+
+// Ensure virtual fields are serialised.
+SolicitudeSchema.set("toJSON", {
+  virtuals: true,
+});
+
+export const SolicitudeModel =
+  mongoose.models.Solicitudes ||
+  mongoose.model("Solicitudes", SolicitudeSchema);
+
+const BackupSchema = new mongoose.Schema<Backup>(
+  {
+    solicitude: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "solicitudes",
+    },
+  },
+  { timestamps: true }
+);
+
+// Duplicate the ID field.
+BackupSchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are serialised.
+BackupSchema.set("toJSON", {
+  virtuals: true,
+});
+
+export const BackupModel =
+  mongoose.models.Backups || mongoose.model("Backups", BackupSchema);
 
 const AuditorySchema = new mongoose.Schema<Auditory>(
   {

@@ -4,9 +4,6 @@ import {
   MdOutlineLogout,
 } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { FiShoppingCart } from "react-icons/fi";
-import { HiOutlineDocumentReport } from "react-icons/hi";
-import { RiRemoteControlFill } from "react-icons/ri";
 import { useAuth } from "../hooks/use_auth";
 import { useCallback, useState } from "react";
 import Router from "next/router";
@@ -14,7 +11,7 @@ import { Disclosure } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { CheckPermissions } from "../utils/check_permissions";
-import { AiFillProject } from "react-icons/ai";
+import { LuContainer } from "react-icons/lu";
 
 const Sidebar = () => {
   const currentYear = new Date().getFullYear();
@@ -86,6 +83,34 @@ const Sidebar = () => {
                 </Link>
               </div>
             </div>
+
+            {CheckPermissions(auth, [1, 2]) && (
+              <div className="my-4 border-b border-gray-100 pb-4">
+                <div>
+                  {mostrarCarga && (
+                    <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-white z-50">
+                      <Image
+                        src="/logo.jpeg"
+                        alt="Cargando..."
+                        width={200}
+                        height={200}
+                        priority={false}
+                      />
+                    </div>
+                  )}
+                  <Link href="/solicitude">
+                    <button className="w-full" onClick={handleChanges}>
+                      <div className="flex mb-2 justify-start items-center gap-4 px-5 hover:bg-gray-900 p-2 rounded-full group cursor-pointer hover:shadow-lg m-auto">
+                        <LuContainer className="text-2xl text-gray-600 group-hover:text-white" />
+                        <h3 className="text-base text-gray-800 group-hover:text-white font-semibold ">
+                          Solicitudes
+                        </h3>
+                      </div>
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            )}
 
             {CheckPermissions(auth, [0]) && (
               <div>

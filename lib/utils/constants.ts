@@ -11,3 +11,5 @@ export const Cerrado = "Cerrado"
 export const Abierto = "Abierto"
 
 export const Rechazado = "Rechazado"
+
+export const Terminado = "Terminado"

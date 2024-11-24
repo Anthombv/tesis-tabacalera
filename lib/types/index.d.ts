@@ -22,12 +22,15 @@ export type LoginData = {
 
 //Roles del sistema
 export type UserRole =
-  | 0 //Administrador
-  | 1 //Bodeguero
-  | 2 //Administrador de producto
-  | 3 //Empacador
-  | 4 //Secretaria
-  | 5; //Gerente
+  | 0 //AdministradorSistema
+  | 1 //Curador
+  | 2 //Empacador
+  | 3 //Administrador
+  | 4 //Bodeguero
+  | 5 //Mulling
+  | 6 //Supervisor
+  | 7 //Secretaria
+  | 8; //Gerente
 
 //Datos de los usuarios
 export type User = {
@@ -46,10 +49,10 @@ export type User = {
 export type Estados = En_proceso | Pendiente | Terminado | Rechazado;
 
 export type Comentario = {
-  id?: string
-  usuario: User
-  mensaje: string
-}
+  id?: string;
+  usuario: User;
+  mensaje: string;
+};
 
 export type Cajas = {
   id?: string;
@@ -63,25 +66,30 @@ export type Cajas = {
   pesoNeto: number;
   calidad: string;
   valor: number;
+  casona: string;
+  aposento: string;
   cometarios: Array<Comentario>;
 };
 
 export type Solicitude = {
   id?: string;
+  number: number;
   fecha: string;
-  solicitante: User;
+  informacionCurador: string;
+  solicitante: string;
   cajas: Array<Cajas>;
-  estadoEmpacador: Estados;
-  EstadoAdministrador: Estados;
-  EstadoBodeguero: Estados;
-  EstadoMulling: Estados;
-  EstadoSupervisor: Estados;
-  ValorTotal: number;
+  estadoCurador: string;
+  estadoEmpacador: string;
+  EstadoAdministrador: string;
+  EstadoBodeguero: string;
+  EstadoMulling: string;
+  EstadoSupervisor: string;
 };
 
 //backups
 export type Backup = {
   id?: string;
+  solicitude: any | Solicitude;
 };
 
 //Auditoria del sistema
