@@ -18,8 +18,6 @@ const initialCajas: Cajas = {
   pesoNeto: 0,
   pesoBruto: 0,
   calidad: "",
-  casona: "",
-  aposento: "",
   valor: 0,
   cometarios: [],
 };
@@ -79,23 +77,6 @@ const CajasModal = (props: Props) => {
             <hr />
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-3">
               <div>
-                {CheckPermissions(auth, [0, 2]) && (
-                  <>
-                    <label className="text-gray-700 text-sm font-bold mb-2">
-                      * Numero de caja
-                    </label>
-                    <input
-                      className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                      type="number"
-                      placeholder="Numero de caja"
-                      name="NumeroDeCaja"
-                      value={formik.values?.NumeroDeCaja ?? 0}
-                      onChange={formik.handleChange}
-                    />
-                  </>
-                )}
-              </div>
-              <div>
                 {CheckPermissions(auth, [0, 1, 2]) && (
                   <>
                     <label className="text-gray-700 text-sm font-bold mb-2">
@@ -141,6 +122,26 @@ const CajasModal = (props: Props) => {
                       placeholder="Variedad"
                       name="variedad"
                       value={formik.values?.variedad ?? ""}
+                      onChange={formik.handleChange}
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <div>
+                {CheckPermissions(auth, [0, 1, 2]) && (
+                  <>
+                    <label className="text-gray-700 text-sm font-bold mb-2">
+                      * Numero de caja
+                    </label>
+                    <input
+                      className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                      type="number"
+                      placeholder="Numero de caja"
+                      name="NumeroDeCaja"
+                      value={formik.values?.NumeroDeCaja ?? 0}
                       onChange={formik.handleChange}
                     />
                   </>

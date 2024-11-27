@@ -66,9 +66,14 @@ export type Cajas = {
   pesoNeto: number;
   calidad: string;
   valor: number;
+  cometarios: Array<Comentario>;
+};
+
+export type Fincas = {
+  id?: string;
   casona: string;
   aposento: string;
-  cometarios: Array<Comentario>;
+  cajas: Array<Cajas>;
 };
 
 export type Solicitude = {
@@ -77,7 +82,7 @@ export type Solicitude = {
   fecha: string;
   informacionCurador: string;
   solicitante: string;
-  cajas: Array<Cajas>;
+  fincas: Array<Fincas>;
   estadoCurador: string;
   estadoEmpacador: string;
   EstadoAdministrador: string;

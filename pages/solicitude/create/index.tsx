@@ -4,25 +4,26 @@ import { useAuth } from "../../../lib/hooks/use_auth";
 import { useFormik } from "formik";
 import Router from "next/router";
 import { toast } from "react-toastify";
-import { Solicitude, ResponseData, Cajas } from "../../../lib/types";
+import { Solicitude, ResponseData, Cajas, Fincas } from "../../../lib/types";
 import HttpClient from "../../../lib/utils/http_client";
 import { UploadSolicitudeImages } from "../../../lib/utils/upload_solicitude_images";
 import { useState } from "react";
 import FormatedDate from "../../../lib/utils/formated_date";
 import { Pendiente } from "../../../lib/utils/constants";
-import CajasModal from "../../../lib/components/modals/cajasModal";
 import TreeTable, { ColumnData } from "../../../lib/components/tree_table";
+import FincasModal from "../../../lib/components/modals/fincaModal";
+import ConfirmModal from "../../../lib/components/modals/confirm";
 
 export const SolicitudeCreate = () => {
   const { auth } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
-  const [cajas, setCajas] = useState<Array<Cajas>>([]);
+  const [fincas, setFincas] = useState<Array<Fincas>>([]);
   const [initialValues, _setInitialValues] = useState<Solicitude>({
     number: 0,
     solicitante: auth?.name,
     fecha: FormatedDate(),
     informacionCurador: "",
-    cajas: [],
+    fincas: [],
     estadoCurador: Pendiente,
     estadoEmpacador: Pendiente,
     EstadoAdministrador: Pendiente,
@@ -32,7 +33,8 @@ export const SolicitudeCreate = () => {
   });
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [editingCajas, setEditingCajas] = useState<Cajas | null>(null);
+  const [editingFincas, setEditingFincas] = useState<Fincas | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<string>(null);
 
   const formik = useFormik<Solicitude>({
     enableReinitialize: true,
@@ -43,11 +45,11 @@ export const SolicitudeCreate = () => {
     onSubmit: async (formData: Solicitude) => {
       console.log(formData);
       setLoading(true);
-      console.log(cajas);
+      console.log(fincas);
 
       const payload = {
         ...formData,
-        cajas: cajas,
+        fincas: fincas,
       };
       console.log(payload);
       const response: ResponseData = await HttpClient(
@@ -70,6 +72,9 @@ export const SolicitudeCreate = () => {
   const showModal = () => setModalVisible(true);
   const hideModal = () => setModalVisible(false);
 
+  const showConfirmModal = (fincaId: string) => setItemToDelete(fincaId);
+  const hideConfirmModal = () => setItemToDelete(null);
+
   const columns: ColumnData[] = [
     {
       dataField: "casona",
@@ -81,22 +86,15 @@ export const SolicitudeCreate = () => {
       caption: "Aposento",
       cssClass: "bold",
     },
-    {
-      dataField: "corte",
-      caption: "Corte",
-      cssClass: "bold",
-    },
-    {
-      dataField: "lote",
-      caption: "Lote",
-      cssClass: "bold",
-    },
-    {
-      dataField: "variedad",
-      caption: "Variedad",
-      cssClass: "bold",
-    },
   ];
+
+  const buttons = {
+    edit: (rowData: Fincas) => {
+      setEditingFincas(rowData);
+      showModal();
+    },
+    delete: (rowData: Fincas) => showConfirmModal(rowData.id),
+  };
 
   return (
     <>
@@ -149,6 +147,12 @@ export const SolicitudeCreate = () => {
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-4">
+                <button
+                  onClick={showModal}
+                  className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
+                >
+                  Agregar finca
+                </button>
                 <Button
                   className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
                   onClick={() => formik.handleSubmit()}
@@ -156,32 +160,64 @@ export const SolicitudeCreate = () => {
                   Guardar Solicitud
                 </Button>
               </div>
+              <div className="p-2">
+                <TreeTable
+                  keyExpr="id"
+                  dataSource={fincas}
+                  columns={columns}
+                  searchPanel={true}
+                  buttons={buttons}
+                  colors={{
+                    headerBackground: "#F8F9F9",
+                    headerColor: "#CD5C5C",
+                  }}
+                  buttonsFirst
+                  paging
+                  showNavigationButtons
+                  showNavigationInfo
+                  pageSize={15}
+                  infoText={(actual, total, items) =>
+                    `Página ${actual} de ${total} (${items} solicitudes)`
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <CajasModal
+      <FincasModal
         visible={modalVisible}
         close={hideModal}
-        initialData={editingCajas}
-        onDone={(newItem: Cajas) => {
-          if (editingCajas === null) {
-            setCajas((oldData) => [
+        initialData={editingFincas}
+        onDone={(newItem: Fincas) => {
+          if (editingFincas === null) {
+            setFincas((oldData) => [
               ...oldData,
               { ...newItem, id: `${oldData.length + 1}` },
             ]);
-            console.log(cajas);
+            console.log(fincas);
             console.log(newItem);
           } else {
-            setCajas((oldData) =>
-              oldData.map((element: Cajas) =>
+            setFincas((oldData) =>
+              oldData.map((element: Fincas) =>
                 element.id === newItem.id ? newItem : element
               )
             );
-            console.log(cajas);
-            setEditingCajas(null);
+            console.log(fincas);
+            setEditingFincas(null);
           }
+        }}
+      />
+
+      <ConfirmModal
+        visible={itemToDelete !== null}
+        close={() => setItemToDelete(null)}
+        onDone={() => {
+          setFincas((oldData) => [
+            ...oldData.filter((item: Fincas) => item.id !== itemToDelete),
+          ]);
+          hideConfirmModal();
         }}
       />
     </>

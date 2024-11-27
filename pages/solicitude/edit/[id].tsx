@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { TabPanel } from "../../../lib/components/tab_container";
 import SoliciterPanel from "../../../lib/layouts/edit_solicitude/soliciter";
-import { Cajas, ResponseData, Solicitude } from "../../../lib/types";
+import { Cajas, Fincas, ResponseData, Solicitude } from "../../../lib/types";
 import FormatedDate from "../../../lib/utils/formated_date";
 import { useEffect, useState } from "react";
 import { Pendiente } from "../../../lib/utils/constants";
@@ -18,16 +18,17 @@ import { Table } from "react-bootstrap";
 import { FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
 import CajasModal from "../../../lib/components/modals/cajasModal";
 import EmpacadorPanel from "../../../lib/layouts/edit_solicitude/empacador";
+import FincasModal from "../../../lib/components/modals/fincaModal";
 
 export const EditSolicitude = () => {
   const { auth } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
-  const [cajas, setCajas] = useState<Array<Cajas>>([]);
+  const [fincas, setFincas] = useState<Array<Fincas>>([]);
   const [initialValues, setInitialValues] = useState<Solicitude>({
     number: 0,
     solicitante: auth?.name,
     fecha: FormatedDate(),
-    cajas: [],
+    fincas: [],
     informacionCurador: "",
     estadoCurador: Pendiente,
     estadoEmpacador: Pendiente,
@@ -37,6 +38,7 @@ export const EditSolicitude = () => {
     EstadoSupervisor: Pendiente,
   });
   const [editingCajas, setEditingCajas] = useState<Cajas | null>(null);
+  const [editingFincas, setEditingFincas] = useState<Fincas | null>(null);
   const [itemToDelete, setItemToDelete] = useState<string>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -61,7 +63,7 @@ export const EditSolicitude = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  let currentItems = cajas?.slice(indexOfFirstItem, indexOfLastItem);
+  let currentItems = fincas?.slice(indexOfFirstItem, indexOfLastItem);
 
   const loadData = async () => {
     if (Router.asPath !== Router.route) {
@@ -74,7 +76,8 @@ export const EditSolicitude = () => {
         auth.role
       );
       setInitialValues(response.data);
-      setCajas(response.data.cajas);
+      setFincas(response.data.fincas);
+      console.log(fincas, initialValues);
       setLoading(false);
     } else {
       setTimeout(loadData, 1000);
@@ -92,7 +95,7 @@ export const EditSolicitude = () => {
       const solicitudeId = Router.query.id as string;
       const requestData = {
         ...formData,
-        cajas: cajas,
+        fincas: fincas,
         id: solicitudeId,
       };
       console.log(requestData);
@@ -131,11 +134,11 @@ export const EditSolicitude = () => {
   const hideConfirmModal = () => setItemToDelete(null);
 
   const buttons = {
-    edit: (rowData: Cajas) => {
-      setEditingCajas(rowData);
+    edit: (rowData: Fincas) => {
+      setEditingFincas(rowData);
       showModal();
     },
-    delete: (rowData: Cajas) => {
+    delete: (rowData: Fincas) => {
       if (CheckPermissions(auth, [0, 1])) {
         showConfirmModal(rowData.id);
       }
@@ -157,7 +160,7 @@ export const EditSolicitude = () => {
     },
   ];
 
-  const totalPages = Math.ceil(cajas?.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(fincas?.length / ITEMS_PER_PAGE);
   const pageNumbers = [];
 
   for (let i = 1; i <= totalPages; i++) {
@@ -171,8 +174,8 @@ export const EditSolicitude = () => {
 
   //ordena la tabla por el nombre del proyecto
   const sortItemsByName = () => {
-    const sortedItems = [...cajas].sort((a, b) =>
-      a.corte.localeCompare(b.corte)
+    const sortedItems = [...fincas].sort((a, b) =>
+      a.aposento.localeCompare(b.aposento)
     );
     currentItems = sortedItems.slice(indexOfFirstItem, indexOfLastItem);
   };
@@ -187,9 +190,9 @@ export const EditSolicitude = () => {
     if (searchTerm === "") {
       return currentItems;
     } else {
-      return cajas.filter(
+      return fincas.filter(
         (item) =>
-          item.corte.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
+          item.aposento.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
       );
     }
   };
@@ -276,7 +279,7 @@ export const EditSolicitude = () => {
                   Actualizar
                 </button>
               </div>
-              {CheckPermissions(auth, [0, 2, 3, 4, 5, 6]) && (
+              {CheckPermissions(auth, [0, 1, 2, 3, 4, 5, 6]) && (
                 <>
                   <div className="container px-80">
                     <div className="text-center mx-auto block col-md-6 col-lg-3 mb-2">
@@ -314,16 +317,10 @@ export const EditSolicitude = () => {
                         <tr className="text-center p-0 align-middle">
                           <th>Acciones</th>
                           {CheckPermissions(auth, [0, 1, 2, 3, 4, 5, 6]) && (
-                            <th className="px-6 py-3">Numero de caja</th>
+                            <th className="px-6 py-3">Casona</th>
                           )}
                           {CheckPermissions(auth, [0, 1, 2, 3, 4, 5, 6]) && (
-                            <th className="px-6 py-3">Corte</th>
-                          )}
-                          {CheckPermissions(auth, [0, 1, 2, 3, 4, 5, 6]) && (
-                            <th className="px-6 py-3">Lote</th>
-                          )}
-                          {CheckPermissions(auth, [0, 1, 2, 3, 4, 5, 6]) && (
-                            <th className="px-6 py-3">Variedad</th>
+                            <th className="px-6 py-3">Aposento</th>
                           )}
                         </tr>
                       </thead>
@@ -366,19 +363,12 @@ export const EditSolicitude = () => {
                                 {CheckPermissions(
                                   auth,
                                   [0, 1, 2, 3, 4, 5, 6, 8]
-                                ) && <td>{item.NumeroDeCaja}</td>}
+                                ) && <td>{item.casona}</td>}
+
                                 {CheckPermissions(
                                   auth,
                                   [0, 1, 2, 3, 4, 5, 6, 8]
-                                ) && <td>{item.corte}</td>}
-                                {CheckPermissions(
-                                  auth,
-                                  [0, 1, 2, 3, 4, 5, 6, 8]
-                                ) && <td>{item.lote}</td>}
-                                {CheckPermissions(
-                                  auth,
-                                  [0, 1, 2, 3, 4, 5, 6, 8]
-                                ) && <td>{item.variedad}</td>}
+                                ) && <td>{item.aposento}</td>}
                               </tr>
                             );
                           })}
@@ -393,23 +383,23 @@ export const EditSolicitude = () => {
         </div>
       </div>
 
-      <CajasModal
+      <FincasModal
         visible={modalVisible}
         close={hideModal}
-        initialData={editingCajas}
-        onDone={(newItem: Cajas) => {
-          if (editingCajas === null) {
-            setCajas((oldData) => [
+        initialData={editingFincas}
+        onDone={(newItem: Fincas) => {
+          if (editingFincas === null) {
+            setFincas((oldData) => [
               ...oldData,
               { ...newItem, id: `${oldData.length + 1}` },
             ]);
           } else {
-            setCajas((oldData) =>
-              oldData.map((element: Cajas) =>
+            setFincas((oldData) =>
+              oldData.map((element: Fincas) =>
                 element.id === newItem.id ? newItem : element
               )
             );
-            setEditingCajas(null);
+            setEditingFincas(null);
           }
         }}
       />

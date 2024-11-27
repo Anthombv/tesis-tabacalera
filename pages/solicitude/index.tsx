@@ -7,7 +7,7 @@ import LoadingContainer from "../../lib/components/loading_container";
 import TreeTable, { ColumnData } from "../../lib/components/tree_table";
 import { useAuth } from "../../lib/hooks/use_auth";
 import { useEffect, useState } from "react";
-import { Cajas, Solicitude } from "../../lib/types";
+import { Cajas, Fincas, Solicitude } from "../../lib/types";
 import HttpClient from "../../lib/utils/http_client";
 import { StateField } from "../../lib/styles/views/indexStyled";
 import { Pendiente } from "../../lib/utils/constants";
@@ -69,26 +69,7 @@ export const SolicitudePage = (props: Props) => {
       caption: "Solicitante",
       cssClass: "bold",
     },
-    {
-      dataField: "cajas",
-      caption: "Valor Total",
-      cellRender: (params) => {
-        const Cajass: Array<Cajas> = params.value;
-        let total = 0;
-        if (Cajass.length > 0)
-          Cajass.forEach((item: Cajas) => {
-            total += item.valor ?? 0;
-          });
-
-        return (
-          <p style={{ margin: 2 }}>
-            <strong>${total}</strong>
-          </p>
-        );
-      },
-      cssClass: "bold",
-      width: 100,
-    },
+    
     {
       dataField: "estadoCurador",
       caption: "Curador",

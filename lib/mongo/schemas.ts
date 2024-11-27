@@ -1,5 +1,13 @@
 import mongoose, { mongo, Schema } from "mongoose";
-import { Auditory, Backup, Cajas, Comentario, Solicitude, User } from "../types";
+import {
+  Auditory,
+  Backup,
+  Cajas,
+  Comentario,
+  Fincas,
+  Solicitude,
+  User,
+} from "../types";
 
 const UserSchema = new mongoose.Schema<User>(
   {
@@ -61,8 +69,6 @@ const CajasSchema = new mongoose.Schema<Cajas>(
     pesoNeto: { type: Number },
     valor: { type: Number },
     calidad: { type: String },
-    casona: { type: String },
-    aposento: { type: String },
     cometarios: { type: [ComentarioSchema] },
   },
   { timestamps: true }
@@ -78,13 +84,33 @@ CajasSchema.set("toJSON", {
   virtuals: true,
 });
 
+const FincasSchema = new mongoose.Schema<Fincas>(
+  {
+    //Solicitante
+    casona: { type: String },
+    aposento: { type: String },
+    cajas: { type: [CajasSchema] },
+  },
+  { timestamps: true }
+);
+
+// Duplicate the ID field.
+FincasSchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+
+// Ensure virtual fields are serialised.
+FincasSchema.set("toJSON", {
+  virtuals: true,
+});
+
 const SolicitudeSchema = new mongoose.Schema<Solicitude>(
   {
     number: { type: Number },
     fecha: { type: String },
     solicitante: { type: String },
     informacionCurador: { type: String },
-    cajas: { type: [CajasSchema] },
+    fincas: { type: [FincasSchema] },
     estadoCurador: { type: String },
     estadoEmpacador: { type: String },
     EstadoAdministrador: { type: String },
@@ -103,7 +129,9 @@ SolicitudeSchema.virtual("id").get(function () {
 // Calculate total from factures.
 SolicitudeSchema.virtual("total").get(function () {
   let total = 0;
-  this.cajas.forEach((element: Cajas) => (total += element.valor ?? 0));
+  this.fincas[0].cajas.forEach(
+    (element: Cajas) => (total += element.valor ?? 0)
+  );
   return total;
 });
 
