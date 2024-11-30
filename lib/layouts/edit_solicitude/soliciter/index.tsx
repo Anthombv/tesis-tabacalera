@@ -40,7 +40,7 @@ const SoliciterPanel = (props: Props) => {
             auth,
             [1],
             formik.values?.estadoCurador,
-            Aprobado
+            Terminado
           )}
         >
           <option>Seleccione una opción</option>

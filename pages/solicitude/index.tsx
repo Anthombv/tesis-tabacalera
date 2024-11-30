@@ -86,6 +86,14 @@ export const SolicitudePage = (props: Props) => {
       alignment: "center",
       cssClass: "bold",
     },
+    {
+      dataField: "EstadoAdministrador",
+      caption: "Administrador",
+      cellRender: (params) => <StateField state={params.value ?? Pendiente} />,
+      width: 80,
+      alignment: "center",
+      cssClass: "bold",
+    },
   ];
 
   const buttons = {

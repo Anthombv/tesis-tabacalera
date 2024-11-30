@@ -9,10 +9,11 @@ import HttpClient from "../../../lib/utils/http_client";
 import { UploadSolicitudeImages } from "../../../lib/utils/upload_solicitude_images";
 import { useState } from "react";
 import FormatedDate from "../../../lib/utils/formated_date";
-import { Pendiente } from "../../../lib/utils/constants";
+import { Pendiente, Terminado } from "../../../lib/utils/constants";
 import TreeTable, { ColumnData } from "../../../lib/components/tree_table";
 import FincasModal from "../../../lib/components/modals/fincaModal";
 import ConfirmModal from "../../../lib/components/modals/confirm";
+import { CheckFinished } from "../../../lib/utils/check_permissions";
 
 export const SolicitudeCreate = () => {
   const { auth } = useAuth();
@@ -24,6 +25,7 @@ export const SolicitudeCreate = () => {
     fecha: FormatedDate(),
     informacionCurador: "",
     fincas: [],
+    cometarios: [],
     estadoCurador: Pendiente,
     estadoEmpacador: Pendiente,
     EstadoAdministrador: Pendiente,
@@ -84,6 +86,21 @@ export const SolicitudeCreate = () => {
     {
       dataField: "aposento",
       caption: "Aposento",
+      cssClass: "bold",
+    },
+    {
+      dataField: "lote",
+      caption: "Lote",
+      cssClass: "bold",
+    },
+    {
+      dataField: "corte",
+      caption: "Corte",
+      cssClass: "bold",
+    },
+    {
+      dataField: "variedad",
+      caption: "Variedad",
       cssClass: "bold",
     },
   ];
@@ -150,8 +167,14 @@ export const SolicitudeCreate = () => {
                 <button
                   onClick={showModal}
                   className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
+                  disabled={CheckFinished(
+                    auth,
+                    [1],
+                    formik.values?.estadoCurador,
+                    Terminado
+                  )}
                 >
-                  Agregar finca
+                  Agregar casona
                 </button>
                 <Button
                   className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"

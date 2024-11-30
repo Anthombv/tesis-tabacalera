@@ -2,15 +2,21 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useAuth } from "../../hooks/use_auth";
-import { Fincas, ModalProps, ResponseData } from "../../types";
-import { CheckPermissions } from "../../utils/check_permissions";
+import { Fincas, ModalProps, ResponseData, Solicitude } from "../../types";
+import { CheckFinished, CheckPermissions } from "../../utils/check_permissions";
 import HttpClient from "../../utils/http_client";
 import { UploadSolicitudeImages } from "../../utils/upload_solicitude_images";
+import { Pendiente, Terminado } from "../../utils/constants";
+import Router from "next/router";
+import FormatedDate from "../../utils/formated_date";
 
 const initialFincas: Fincas = {
   id: null,
   aposento: "",
   casona: "",
+  corte: "",
+  lote: "",
+  variedad: "",
   cajas: [],
 };
 
@@ -20,6 +26,20 @@ interface Props extends ModalProps<Fincas> {
 
 const FincasModal = (props: Props) => {
   const { auth } = useAuth();
+  const [solicitude, setSolicitude] = useState<Solicitude>({
+    number: 0,
+    solicitante: auth?.name,
+    fecha: FormatedDate(),
+    fincas: [],
+    cometarios: [],
+    informacionCurador: "",
+    estadoCurador: Pendiente,
+    estadoEmpacador: Pendiente,
+    EstadoAdministrador: Pendiente,
+    EstadoBodeguero: Pendiente,
+    EstadoMulling: Pendiente,
+    EstadoSupervisor: Pendiente,
+  })
   const [initialValues, setInitialValues] = useState<Fincas>(initialFincas);
   const [image, setImage] = useState<File>(null);
 
@@ -54,7 +74,6 @@ const FincasModal = (props: Props) => {
     formik.setFieldValue("cajas", updatedCajas);
   };
 
-
   // maneja los datos y comportamiento del formulario
   const formik = useFormik<Fincas>({
     enableReinitialize: true,
@@ -76,6 +95,29 @@ const FincasModal = (props: Props) => {
     if (props.initialData) setInitialValues(props.initialData);
   }, [props.initialData]);
 
+  const loadData = async () => {
+    if (Router.asPath !== Router.route) {
+      const solicitudeId = Router.query.id as string;
+      
+      const response: ResponseData = await HttpClient(
+        "/api/solicitude/" + solicitudeId,
+        "GET",
+        auth.userName,
+        auth.role
+      );
+      setSolicitude(response.data);
+      console.log(solicitude)
+      console.log(solicitudeId)
+    } else {
+      setTimeout(loadData, 100);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <div
@@ -95,7 +137,7 @@ const FincasModal = (props: Props) => {
             <hr />
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-3">
               <div>
-                {CheckPermissions(auth, [0, 1, 2]) && (
+                {CheckPermissions(auth, [0, 1, 2, 3]) && (
                   <>
                     <label className="text-gray-700 text-sm font-bold mb-2">
                       * Casona
@@ -112,7 +154,7 @@ const FincasModal = (props: Props) => {
                 )}
               </div>
               <div>
-                {CheckPermissions(auth, [0, 1, 2]) && (
+                {CheckPermissions(auth, [0, 1, 2, 3]) && (
                   <>
                     <label className="text-gray-700 text-sm font-bold mb-2">
                       * Aposento
@@ -128,6 +170,57 @@ const FincasModal = (props: Props) => {
                   </>
                 )}
               </div>
+              <div>
+                {CheckPermissions(auth, [0, 1, 2, 3]) && (
+                  <>
+                    <label className="text-gray-700 text-sm font-bold mb-2">
+                      * Lote
+                    </label>
+                    <input
+                      className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                      type="text"
+                      placeholder="Lote"
+                      name="lote"
+                      value={formik.values?.lote ?? ""}
+                      onChange={formik.handleChange}
+                    />
+                  </>
+                )}
+              </div>
+              <div>
+                {CheckPermissions(auth, [0, 1, 2, 3]) && (
+                  <>
+                    <label className="text-gray-700 text-sm font-bold mb-2">
+                      * Corte
+                    </label>
+                    <input
+                      className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                      type="text"
+                      placeholder="Corte"
+                      name="corte"
+                      value={formik.values?.corte ?? ""}
+                      onChange={formik.handleChange}
+                    />
+                  </>
+                )}
+              </div>
+              <div>
+                {CheckPermissions(auth, [0, 1, 2, 3]) && (
+                  <>
+                    <label className="text-gray-700 text-sm font-bold mb-2">
+                      * Variedad
+                    </label>
+                    <input
+                      className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                      type="text"
+                      placeholder="Variedad"
+                      name="variedad"
+                      value={formik.values?.variedad ?? ""}
+                      onChange={formik.handleChange}
+                    />
+                  </>
+                )}
+              </div>
             </div>
 
             <hr />
@@ -138,7 +231,11 @@ const FincasModal = (props: Props) => {
                 <button
                   type="button"
                   className="bg-blue-500 text-white px-4 py-2 rounded"
-                  onClick={addCaja}
+                  onClick={() => {
+                    CheckPermissions(auth, [0, 2])
+                      ? addCaja()
+                      : toast.info("No tienes permiso para agregar cajas");
+                  }}
                 >
                   + Añadir Caja
                 </button>
@@ -162,47 +259,15 @@ const FincasModal = (props: Props) => {
                         className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                       />
                     </div>
-                    <div>
-                      <label className="text-gray-700 text-sm font-bold mb-2">
-                        Corte
-                      </label>
-                      <input
-                        type="text"
-                        name={`cajas[${index}].corte`}
-                        value={caja.corte}
-                        onChange={formik.handleChange}
-                        className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-gray-700 text-sm font-bold mb-2">
-                        Lote
-                      </label>
-                      <input
-                        type="text"
-                        name={`cajas[${index}].lote`}
-                        value={caja.lote}
-                        onChange={formik.handleChange}
-                        className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-gray-700 text-sm font-bold mb-2">
-                        Variedad
-                      </label>
-                      <input
-                        type="text"
-                        name={`cajas[${index}].variedad`}
-                        value={caja.variedad}
-                        onChange={formik.handleChange}
-                        className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                      />
-                    </div>
                   </div>
                   <button
                     type="button"
                     className="bg-red-500 text-white px-4 py-2 rounded mt-2 self-end"
-                    onClick={() => removeCaja(index)}
+                    onClick={() => {
+                      CheckPermissions(auth, [0, 2])
+                        ? removeCaja(index)
+                        : toast.info("No tienes permiso para eliminar cajas");
+                    }}
                   >
                     Eliminar Caja
                   </button>
@@ -236,3 +301,5 @@ const FincasModal = (props: Props) => {
   );
 };
 export default FincasModal;
+
+

@@ -1,22 +1,22 @@
 import FormatedDate from "../../utils/formated_date";
-import { ModalProps, Comment } from "../../types";
 import { useAuth } from "../../hooks/use_auth";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import theme from "../../styles/theme";
 import { toast } from "react-toastify";
+import { Comentario, ModalProps } from "../../types";
 
-interface Props extends ModalProps<Comment> {
-  initialData?: Comment;
+interface Props extends ModalProps<Comentario> {
+  initialData?: Comentario;
 }
 
 const ComentModal = (props: Props) => {
   const { auth } = useAuth();
-  const [initialValues, setInitialValues] = useState<Comment>({
+  const [initialValues, setInitialValues] = useState<Comentario>({
     id: null,
-    userComment: auth?.userName,
-    dateComment: FormatedDate(),
-    messageComment: "",
+    usuario: auth?.userName,
+    fecha: FormatedDate(),
+    mensaje: "",
   });
 
   const handleClose = () => {
@@ -30,8 +30,8 @@ const ComentModal = (props: Props) => {
     validateOnBlur: true,
     validateOnChange: true,
     initialValues,
-    onSubmit: async (formData: Comment) => {
-      if (formData.messageComment.trim() === "") {
+    onSubmit: async (formData: Comentario) => {
+      if (formData.mensaje.trim() === "") {
         toast.warning("El comentario no puede estar vacío");
         return;
       }
@@ -55,8 +55,8 @@ const ComentModal = (props: Props) => {
         <div className="bg-white p-6 rounded shadow-lg z-10 md:w-1/3 w-2/3 h-3/6 overflow-y-auto">
           <form onSubmit={formik.handleSubmit}>
             <div
-              style={{ 
-                color: theme.colors.grey 
+              style={{
+                color: theme.colors.grey,
               }}
               className="text-center text-xl mb-2 font-semibold"
             >
@@ -71,9 +71,9 @@ const ComentModal = (props: Props) => {
                 <input
                   className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                   placeholder="Nombre"
-                  name="userComment"
+                  name="usuario"
                   onChange={formik.handleChange}
-                  value={formik.values.userComment ?? ""}
+                  value={formik.values.usuario ?? ""}
                   disabled
                 />
               </div>
@@ -83,9 +83,9 @@ const ComentModal = (props: Props) => {
                 </label>
                 <input
                   className="appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                  name="dateComment"
+                  name="fecha"
                   onChange={formik.handleChange}
-                  value={formik.values.dateComment ?? ""}
+                  value={formik.values.fecha ?? ""}
                   disabled
                 />
               </div>
@@ -96,15 +96,15 @@ const ComentModal = (props: Props) => {
                 <textarea
                   className="w-full h-24 resize-y text-left border-2 border-gray-200"
                   placeholder="Escriba aqui su Comentario lo mas detallado posible"
-                  name="messageComment"
+                  name="mensaje"
                   onChange={formik.handleChange}
-                  value={formik.values.messageComment ?? ""}
+                  value={formik.values.mensaje ?? ""}
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4 mb-3">
               <button
-                className="text-center bg-transparent hover:bg-red-500 text-red-500 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded-full text-sm"
+                className="text-center bg-transparent hover:bg-yellow-500 text-yellow-500 font-semibold hover:text-white py-2 px-4 border border-yellow-500 hover:border-transparent rounded-full text-sm"
                 type="submit"
               >
                 Guardar Comentario

@@ -1,10 +1,16 @@
 import { useFormik } from "formik";
 import { TabPanel } from "../../../lib/components/tab_container";
 import SoliciterPanel from "../../../lib/layouts/edit_solicitude/soliciter";
-import { Cajas, Fincas, ResponseData, Solicitude } from "../../../lib/types";
+import {
+  Cajas,
+  Comentario,
+  Fincas,
+  ResponseData,
+  Solicitude,
+} from "../../../lib/types";
 import FormatedDate from "../../../lib/utils/formated_date";
 import { useEffect, useState } from "react";
-import { Pendiente } from "../../../lib/utils/constants";
+import { Pendiente, Terminado } from "../../../lib/utils/constants";
 import { useAuth } from "../../../lib/hooks/use_auth";
 import Router from "next/router";
 import HttpClient from "../../../lib/utils/http_client";
@@ -12,23 +18,29 @@ import { toast } from "react-toastify";
 import Sidebar from "../../../lib/components/sidebar";
 import {
   CheckFinished,
+  CheckFinishedToMore,
   CheckPermissions,
 } from "../../../lib/utils/check_permissions";
-import { Table } from "react-bootstrap";
+import { Button, Col, Row, Table } from "react-bootstrap";
 import { FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
 import CajasModal from "../../../lib/components/modals/cajasModal";
 import EmpacadorPanel from "../../../lib/layouts/edit_solicitude/empacador";
 import FincasModal from "../../../lib/components/modals/fincaModal";
+import TreeTable, { ColumnData } from "../../../lib/components/tree_table";
+import ComentModal from "../../../lib/components/modals/coment";
+import AdminPanel from "../../../lib/layouts/edit_solicitude/administrador";
 
 export const EditSolicitude = () => {
   const { auth } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
+  const [itemsComment, setItemsComment] = useState<Array<Comentario>>([]);
   const [fincas, setFincas] = useState<Array<Fincas>>([]);
   const [initialValues, setInitialValues] = useState<Solicitude>({
     number: 0,
     solicitante: auth?.name,
     fecha: FormatedDate(),
     fincas: [],
+    cometarios: [],
     informacionCurador: "",
     estadoCurador: Pendiente,
     estadoEmpacador: Pendiente,
@@ -41,6 +53,11 @@ export const EditSolicitude = () => {
   const [editingFincas, setEditingFincas] = useState<Fincas | null>(null);
   const [itemToDelete, setItemToDelete] = useState<string>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+
+  const [commentModalVisible, setCommentModalVisible] =
+    useState<boolean>(false);
+  const [itemCommentToDelete, setItemCommentToDelete] = useState<string>(null);
+  const [editingComment, setEditingComment] = useState<Comentario | null>(null);
 
   function getHighlightedText(text: string, highlight: string) {
     const parts = text.split(new RegExp(`(${highlight})`, "gi"));
@@ -77,6 +94,7 @@ export const EditSolicitude = () => {
       );
       setInitialValues(response.data);
       setFincas(response.data.fincas);
+      setItemsComment(response.data.cometarios);
       console.log(fincas, initialValues);
       setLoading(false);
     } else {
@@ -97,6 +115,7 @@ export const EditSolicitude = () => {
         ...formData,
         fincas: fincas,
         id: solicitudeId,
+        cometarios: itemsComment,
       };
       console.log(requestData);
       const response: ResponseData = await HttpClient(
@@ -132,6 +151,12 @@ export const EditSolicitude = () => {
 
   const showConfirmModal = (factureId: string) => setItemToDelete(factureId);
   const hideConfirmModal = () => setItemToDelete(null);
+
+  const showModalComment = () => setCommentModalVisible(true);
+
+  const showConfirmModalComment = (commentId: string) =>
+    setItemCommentToDelete(commentId);
+  const hideConfirmModalComment = () => setItemCommentToDelete(null);
 
   const buttons = {
     edit: (rowData: Fincas) => {
@@ -197,10 +222,47 @@ export const EditSolicitude = () => {
     }
   };
 
+  const columnsComent: ColumnData[] = [
+    {
+      dataField: "usuario",
+      caption: "Nombre",
+      width: 200,
+      alignment: "center",
+      cssClass: "bold",
+    },
+    {
+      dataField: "fecha",
+      caption: "Fecha",
+      width: 200,
+      alignment: "center",
+      cssClass: "bold",
+    },
+    {
+      dataField: "mensaje",
+      caption: "Comentario",
+      alignment: "left",
+      cssClass: "bold",
+    },
+  ];
+
+  const buttonsComment = {
+    edit: (rowData: Comentario) => {
+      setEditingComment(rowData);
+      CheckPermissions(auth, [0])
+        ? showModalComment()
+        : toast.info("No puedes editar un comentario");
+    },
+    delete: async (rowData: Comentario) => {
+      CheckPermissions(auth, [0])
+        ? showConfirmModalComment(rowData.id)
+        : toast.info("No puedes borrar un comentario");
+    },
+  };
+
   return (
     <>
       <title>Editar solicitud</title>
-      <div className="flex h-screen">
+      <div className="flex h-full">
         <div className="md:w-1/6 max-w-none">
           <Sidebar />
         </div>
@@ -210,7 +272,7 @@ export const EditSolicitude = () => {
             background: "#EED77B",
           }}
         >
-          <div className="bg-white w-5/6 h-5/6 mx-auto">
+          <div className="bg-white w-5/6 h-auto mx-auto">
             <div className="mt-10">
               <p className="md:text-4xl text-xl text-center pt-5 font-extrabold text-yellow-500">
                 Editar solicitud de envio de contenedor
@@ -243,6 +305,7 @@ export const EditSolicitude = () => {
                     placeholder="Ingresa la informacion del tabaco"
                     value={formik.values.informacionCurador}
                     onChange={formik.handleChange}
+                    disabled
                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
                 </div>
@@ -251,30 +314,39 @@ export const EditSolicitude = () => {
                     <SoliciterPanel lg={6} md={6} formik={formik} />
                   ) : CheckPermissions(auth, [2]) ? (
                     <EmpacadorPanel lg={6} md={6} formik={formik} />
+                  ) : CheckPermissions(auth, [3]) ? (
+                    <AdminPanel lg={6} md={6} formik={formik} />
                   ) : null}
                 </div>
               </div>
               <div>
-                <button
-                  onClick={showModal}
-                  className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
-                >
-                  Agregar caja
-                </button>
-                <button
-                  className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
-                  onClick={() =>
-                    !CheckFinished(
+                {CheckPermissions(auth, [0, 1]) && (
+                  <button
+                    onClick={showModal}
+                    className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
+                    disabled={CheckFinished(
                       auth,
                       [1],
                       initialValues.estadoCurador,
-                      "Aprobado"
-                    )
-                      ? formik.handleSubmit()
-                      : toast.info(
-                          "La solicitud ya fue aprobada, no tienes permiso para Actualizar"
-                        )
-                  }
+                      Terminado
+                    )}
+                  >
+                    Agregar casona
+                  </button>
+                )}
+                <button
+                  className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
+                  onClick={() => formik.handleSubmit()}
+                  disabled={CheckFinishedToMore(
+                    auth,
+                    [1, 2, 3],
+                    {
+                      1: initialValues.estadoCurador,
+                      2: initialValues.estadoEmpacador,
+                      3: initialValues.EstadoAdministrador,
+                    },
+                    Terminado
+                  )}
                 >
                   Actualizar
                 </button>
@@ -321,6 +393,15 @@ export const EditSolicitude = () => {
                           )}
                           {CheckPermissions(auth, [0, 1, 2, 3, 4, 5, 6]) && (
                             <th className="px-6 py-3">Aposento</th>
+                          )}
+                          {CheckPermissions(auth, [0, 1, 2, 3, 4, 5, 6]) && (
+                            <th className="px-6 py-3">Corte</th>
+                          )}
+                          {CheckPermissions(auth, [0, 1, 2, 3, 4, 5, 6]) && (
+                            <th className="px-6 py-3">Lote</th>
+                          )}
+                          {CheckPermissions(auth, [0, 1, 2, 3, 4, 5, 6]) && (
+                            <th className="px-6 py-3">Variedad</th>
                           )}
                         </tr>
                       </thead>
@@ -369,6 +450,19 @@ export const EditSolicitude = () => {
                                   auth,
                                   [0, 1, 2, 3, 4, 5, 6, 8]
                                 ) && <td>{item.aposento}</td>}
+                                {CheckPermissions(
+                                  auth,
+                                  [0, 1, 2, 3, 4, 5, 6, 8]
+                                ) && <td>{item.corte}</td>}
+
+                                {CheckPermissions(
+                                  auth,
+                                  [0, 1, 2, 3, 4, 5, 6, 8]
+                                ) && <td>{item.lote}</td>}
+                                {CheckPermissions(
+                                  auth,
+                                  [0, 1, 2, 3, 4, 5, 6, 8]
+                                ) && <td>{item.variedad}</td>}
                               </tr>
                             );
                           })}
@@ -378,6 +472,86 @@ export const EditSolicitude = () => {
                   </div>
                 </>
               )}
+            </div>
+            <div
+              style={{
+                marginTop: "3%",
+                margin: "2%",
+                padding: "2em",
+              }}
+            >
+              <h3 className="mt-2 text-center text-lg font-semibold">
+                Registro de Comentarios
+              </h3>
+              <div className="w-75 m-3">
+                <Button
+                  className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
+                  onClick={() => setCommentModalVisible(true)}
+                  disabled={CheckFinishedToMore(
+                    auth,
+                    [1, 2, 3],
+                    {
+                      1: initialValues.estadoCurador,
+                      2: initialValues.estadoEmpacador,
+                      3: initialValues.EstadoAdministrador,
+                    },
+                    Terminado
+                  )}
+                >
+                  Agregar Comentario
+                </Button>
+              </div>
+              <div className="m-3">
+                <TreeTable
+                  keyExpr="id"
+                  dataSource={itemsComment}
+                  columns={columnsComent}
+                  buttons={buttonsComment}
+                  searchPanel={false}
+                  colors={{
+                    headerBackground: "#9ed9f7",
+                    headerColor: "black",
+                    contentBackground: "#c6e5f5",
+                    contentColor: "black",
+                  }}
+                  paging
+                  buttonsFirst
+                  showNavigationButtons
+                  showNavigationInfo
+                  pageSize={15}
+                  infoText={(actual, total, items) =>
+                    `Página ${actual} de ${total} (${items} comentarios)`
+                  }
+                />
+              </div>
+              <Row className="w-75 m-2">
+                <Col className="mb-3" lg={3}>
+                  <Button
+                    className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
+                    onClick={() => formik.handleSubmit()}
+                    disabled={CheckFinishedToMore(
+                      auth,
+                      [1, 2, 3],
+                      {
+                        1: initialValues.estadoCurador,
+                        2: initialValues.estadoEmpacador,
+                        3: initialValues.EstadoAdministrador,
+                      },
+                      Terminado
+                    )}
+                  >
+                    Crear Comentario
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    className="bg-transparent hover:bg-gray-500 text-gray-700 font-semibold hover:text-white py-2 px-4 border border-gray-500 hover:border-transparent rounded-full text-sm"
+                    onClick={() => Router.back()}
+                  >
+                    Volver
+                  </Button>
+                </Col>
+              </Row>
             </div>
           </div>
         </div>
@@ -400,6 +574,27 @@ export const EditSolicitude = () => {
               )
             );
             setEditingFincas(null);
+          }
+        }}
+      />
+
+      <ComentModal
+        visible={commentModalVisible}
+        close={() => setCommentModalVisible(!commentModalVisible)}
+        initialData={editingComment}
+        onDone={(newItemComment: Comentario) => {
+          if (editingComment === null) {
+            setItemsComment((oldData) => [
+              ...oldData,
+              { ...newItemComment, id: `${oldData.length + 1}` },
+            ]);
+          } else {
+            setItemsComment((oldData) =>
+              oldData.map((element: Comentario) =>
+                element.id === newItemComment.id ? newItemComment : element
+              )
+            );
+            setEditingComment(null);
           }
         }}
       />

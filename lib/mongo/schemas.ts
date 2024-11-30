@@ -20,6 +20,7 @@ const UserSchema = new mongoose.Schema<User>(
     identificationCard: { type: String },
     dateBirth: { type: String },
     age: { type: Number },
+    estado: { type: String },
   },
   { timestamps: true }
 );
@@ -40,8 +41,9 @@ export const UserModel =
 const ComentarioSchema = new mongoose.Schema<Comentario>(
   {
     //Solicitante
-    usuario: { type: UserSchema },
+    usuario: { type: String },
     mensaje: { type: String },
+    fecha: { type: String },
   },
   { timestamps: true }
 );
@@ -60,16 +62,13 @@ const CajasSchema = new mongoose.Schema<Cajas>(
   {
     //Solicitante
     NumeroDeCaja: { type: Number },
-    corte: { type: String },
-    lote: { type: String },
-    variedad: { type: String },
+
     cantidad: { type: Number },
     anioCosecha: { type: Number },
     pesoBruto: { type: Number },
     pesoNeto: { type: Number },
     valor: { type: Number },
     calidad: { type: String },
-    cometarios: { type: [ComentarioSchema] },
   },
   { timestamps: true }
 );
@@ -89,6 +88,9 @@ const FincasSchema = new mongoose.Schema<Fincas>(
     //Solicitante
     casona: { type: String },
     aposento: { type: String },
+    corte: { type: String },
+    lote: { type: String },
+    variedad: { type: String },
     cajas: { type: [CajasSchema] },
   },
   { timestamps: true }
@@ -111,6 +113,7 @@ const SolicitudeSchema = new mongoose.Schema<Solicitude>(
     solicitante: { type: String },
     informacionCurador: { type: String },
     fincas: { type: [FincasSchema] },
+    cometarios: { type: [ComentarioSchema] },
     estadoCurador: { type: String },
     estadoEmpacador: { type: String },
     EstadoAdministrador: { type: String },

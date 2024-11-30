@@ -44,35 +44,36 @@ export type User = {
   identificationCard: string;
   dateBirth: string;
   age: number;
+  estado: string;
 };
 
 export type Estados = En_proceso | Pendiente | Terminado | Rechazado;
 
 export type Comentario = {
   id?: string;
-  usuario: User;
+  usuario: string;
   mensaje: string;
+  fecha: string
 };
 
 export type Cajas = {
   id?: string;
   NumeroDeCaja: number;
-  corte: string;
-  lote: string;
-  variedad: string;
   cantidad: number;
   anioCosecha: number;
   pesoBruto: number;
   pesoNeto: number;
   calidad: string;
   valor: number;
-  cometarios: Array<Comentario>;
 };
 
 export type Fincas = {
   id?: string;
   casona: string;
   aposento: string;
+  corte: string;
+  lote: string;
+  variedad: string;
   cajas: Array<Cajas>;
 };
 
@@ -83,6 +84,7 @@ export type Solicitude = {
   informacionCurador: string;
   solicitante: string;
   fincas: Array<Fincas>;
+  cometarios: Array<Comentario>;
   estadoCurador: string;
   estadoEmpacador: string;
   EstadoAdministrador: string;

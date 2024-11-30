@@ -15,6 +15,7 @@ const initialUser: User = {
   identificationCard: "",
   dateBirth: "",
   age: 0,
+  estado: "",
 };
 
 interface Props extends ModalProps<User> {
@@ -202,6 +203,24 @@ const UserModal = (props: Props) => {
                   <option value={6}>Supervisor</option>
                   <option value={7}>Secretaria</option>
                   <option value={8}>Gerente</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-gray-700 text-sm font-bold mb-2">
+                  Estado
+                </label>
+
+                <select
+                  className="border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  aria-label="Default select role"
+                  name="estado"
+                  onChange={formik.handleChange}
+                  value={formik.values.estado}
+                  defaultValue="Activo"
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
                 </select>
               </div>
             </div>

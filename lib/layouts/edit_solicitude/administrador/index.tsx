@@ -7,6 +7,7 @@ import {
   Aprobado,
   Pendiente,
   Terminado,
+  Observacion,
 } from "../../../utils/constants";
 
 type Props = {
@@ -18,7 +19,7 @@ type Props = {
   inTabs?: boolean;
 };
 
-const EmpacadorPanel = (props: Props) => {
+const AdminPanel = (props: Props) => {
   const { auth } = useAuth();
   const formik: FormikComponentProps<Solicitude> = props.formik;
   const { sm, md, lg, xl, inTabs } = props;
@@ -29,22 +30,23 @@ const EmpacadorPanel = (props: Props) => {
           className={inTabs ? "ml-5 mt-3" : ""}
           style={{ color: "black" }}
         >
-          Estado de empacador
+          Estado Administrador
         </Form.Label>
         <Form.Select
-          name="estadoEmpacador"
+          name="EstadoAdministrador"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          value={formik.values?.estadoEmpacador}
+          value={formik.values?.EstadoAdministrador}
           onChange={formik.handleChange}
           disabled={CheckFinished(
             auth,
-            [2],
-            formik.values?.estadoEmpacador,
+            [3],
+            formik.values?.EstadoAdministrador,
             Terminado
           )}
         >
           <option>Seleccione una opción</option>
           <option value={Pendiente}>Pendiente</option>
+          <option value={Observacion}>Observacion</option>
           <option value={Terminado}>Terminado</option>
         </Form.Select>
       </Col>
@@ -52,4 +54,4 @@ const EmpacadorPanel = (props: Props) => {
   );
 };
 
-export default EmpacadorPanel;
+export default AdminPanel;

@@ -84,7 +84,7 @@ const Sidebar = () => {
               </div>
             </div>
 
-            {CheckPermissions(auth, [1, 2]) && (
+            {CheckPermissions(auth, [1, 2, 3]) && (
               <div className="my-4 border-b border-gray-100 pb-4">
                 <div>
                   {mostrarCarga && (

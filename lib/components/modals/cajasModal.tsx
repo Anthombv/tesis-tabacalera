@@ -10,16 +10,12 @@ import { UploadSolicitudeImages } from "../../utils/upload_solicitude_images";
 const initialCajas: Cajas = {
   id: null,
   NumeroDeCaja: 0,
-  corte: "",
-  lote: "",
-  variedad: "",
   cantidad: 0,
   anioCosecha: 0,
   pesoNeto: 0,
   pesoBruto: 0,
   calidad: "",
   valor: 0,
-  cometarios: [],
 };
 
 interface Props extends ModalProps<Cajas> {
@@ -75,59 +71,7 @@ const CajasModal = (props: Props) => {
               AGREGAR NUEVA CAJA
             </div>
             <hr />
-            <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-3">
-              <div>
-                {CheckPermissions(auth, [0, 1, 2]) && (
-                  <>
-                    <label className="text-gray-700 text-sm font-bold mb-2">
-                      * Corte
-                    </label>
-                    <input
-                      className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                      type="text"
-                      placeholder="Corte"
-                      name="corte"
-                      value={formik.values?.corte ?? ""}
-                      onChange={formik.handleChange}
-                    />
-                  </>
-                )}
-              </div>
-              <div>
-                {CheckPermissions(auth, [0, 1, 2]) && (
-                  <>
-                    <label className="text-gray-700 text-sm font-bold mb-2">
-                      * Lote
-                    </label>
-                    <input
-                      className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                      type="text"
-                      placeholder="Lote"
-                      name="lote"
-                      value={formik.values?.lote ?? ""}
-                      onChange={formik.handleChange}
-                    />
-                  </>
-                )}
-              </div>
-              <div>
-                {CheckPermissions(auth, [0, 1, 2]) && (
-                  <>
-                    <label className="text-gray-700 text-sm font-bold mb-2">
-                      * Variedad
-                    </label>
-                    <input
-                      className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                      type="text"
-                      placeholder="Variedad"
-                      name="variedad"
-                      value={formik.values?.variedad ?? ""}
-                      onChange={formik.handleChange}
-                    />
-                  </>
-                )}
-              </div>
-            </div>
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-3"></div>
 
             <div>
               <div>

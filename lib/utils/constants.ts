@@ -13,3 +13,5 @@ export const Abierto = "Abierto"
 export const Rechazado = "Rechazado"
 
 export const Terminado = "Terminado"
+
+export const Observacion = "Observacion"
