@@ -22,6 +22,14 @@ export type LoginData = {
 
 //Roles del sistema
 export type UserRole =
+<<<<<<< HEAD
+  | 0 //Administrador
+  | 1 //Bodeguero
+  | 2 //Administrador de producto
+  | 3 //Empacador
+  | 4 //Secretaria
+  | 5 //Gerente
+=======
   | 0 //AdministradorSistema
   | 1 //Curador
   | 2 //Empacador
@@ -31,6 +39,7 @@ export type UserRole =
   | 6 //Supervisor
   | 7 //Secretaria
   | 8; //Gerente
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
 
 //Datos de los usuarios
 export type User = {
@@ -44,6 +53,12 @@ export type User = {
   identificationCard: string;
   dateBirth: string;
   age: number;
+<<<<<<< HEAD
+};
+
+export type CloudImage = {
+  secure_url: string;
+=======
   estado: string;
 };
 
@@ -94,12 +109,16 @@ export type Solicitude = {
   EstadoBodeguero: string;
   EstadoMulling: string;
   EstadoSupervisor: string;
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
 };
 
 //backups
 export type Backup = {
   id?: string;
+<<<<<<< HEAD
+=======
   solicitude: any | Solicitude;
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
 };
 
 //Auditoria del sistema
