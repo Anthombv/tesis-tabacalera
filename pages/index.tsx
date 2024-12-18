@@ -38,7 +38,7 @@ export default function Home() {
   };
   return (
     <>
-      <title>Tabacaleraa</title>
+      <title>Tabacalera</title>
       <div className="flex h-screen">
         <div className="md:w-1/6 max-w-none">
           <Sidebar />
