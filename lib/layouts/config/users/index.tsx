@@ -62,6 +62,7 @@ const UsersPanel = () => {
       caption: "Cedula o RUC",
     },
     {
+<<<<<<< HEAD
       dataField: "department",
       caption: "Departamento",
     },
@@ -70,11 +71,14 @@ const UsersPanel = () => {
       caption: "Cargo o Puesto",
     },
     {
+=======
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
       dataField: "role",
       caption: "Rol",
       cellRender: ({ text }: any) => {
         switch (text) {
           case "0":
+<<<<<<< HEAD
             return "Administrador";
           case "1":
             return "Ventas";
@@ -86,6 +90,25 @@ const UsersPanel = () => {
             return "Gerente";
           case "5":
             return "Financiero";
+=======
+            return "AdministradorSistema";
+          case "1":
+            return "Curador";
+          case "2":
+            return "Empacador";
+          case "3":
+            return "Administrador";
+          case "4":
+            return "Bodeguero";
+          case "5":
+            return "Mulling";
+          case "6":
+            return "Supervisor";
+          case "7":
+            return "Secretaria";
+          case "8":
+            return "Gerente";
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
           default:
             return "";
         }
@@ -128,7 +151,11 @@ const UsersPanel = () => {
           paging
           showNavigationButtons
           showNavigationInfo
+<<<<<<< HEAD
           pageSize={15}
+=======
+          pageSize={10}
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
           infoText={(actual, total, items) =>
             `Página ${actual} de ${total} (${items} Usuarios)`
           }

@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/use_auth";
 import theme from "../../styles/theme";
 import { User, ModalProps } from "../../types";
+<<<<<<< HEAD
+=======
+import { toast } from "react-toastify";
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
 
 const initialUser: User = {
   id: null,
@@ -15,6 +19,10 @@ const initialUser: User = {
   identificationCard: "",
   dateBirth: "",
   age: 0,
+<<<<<<< HEAD
+=======
+  estado: "",
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
 };
 
 interface Props extends ModalProps<User> {
@@ -39,7 +47,37 @@ const UserModal = (props: Props) => {
     validateOnChange: true,
     initialValues,
     onSubmit: async (formData: User) => {
+<<<<<<< HEAD
       setLoading(true);
+=======
+      if (formData.name === "") {
+        toast.warning("El nombre del traabajador no puede estar vacio");
+        return;
+      }
+
+      if (formData.identificationCard === "") {
+        toast.warning("La cedula o ruc del traabajador no puede estar vacio");
+        return;
+      }
+
+      if (formData.userName === "") {
+        toast.warning("Ingrese un nombre de usuario");
+        return;
+      }
+
+      if (formData.password === "") {
+        toast.warning("Ingrese una contraseña para el usuario");
+        return;
+      }
+
+      if (formData.estado === "") {
+        toast.warning("Seleccione un estado para el usuario");
+        return;
+      }
+
+      setLoading(true);
+      console.log(formData);
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
       await props.onDone(formData);
       setLoading(false);
       handleClose();
@@ -79,7 +117,11 @@ const UserModal = (props: Props) => {
               style={{ color: theme.colors.red }}
               className="text-center text-xl mb-2 font-semibold"
             >
+<<<<<<< HEAD
               Crear Nuevo Usuario
+=======
+              Editar Usuario
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
             </div>
             <hr />
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-3">
@@ -180,6 +222,7 @@ const UserModal = (props: Props) => {
                   value={formik.values.email}
                 />
               </div>
+<<<<<<< HEAD
               
               <div>
                 <label className="text-gray-700 text-sm font-bold mb-2">
@@ -213,6 +256,9 @@ const UserModal = (props: Props) => {
                 </select>
               </div>
               
+=======
+
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
               <div>
                 <label className="text-gray-700 text-sm font-bold mb-2">
                   Tipo de Rol
@@ -226,12 +272,43 @@ const UserModal = (props: Props) => {
                   value={formik.values.role}
                   defaultValue={1}
                 >
+<<<<<<< HEAD
                   <option value={1}>1</option>
                   <option value={2}>2</option>
                   <option value={3}>3</option>
                   <option value={4}>4</option>
                   <option value={5}>5</option>
                   <option value={6}>6</option>
+=======
+                  <option value={1}>Curador</option>
+                  <option value={2}>Empacador</option>
+                  <option value={3}>Administrador</option>
+                  <option value={4}>Bodeguero</option>
+                  <option value={5}>Mulling</option>
+                  <option value={6}>Supervisor</option>
+                  <option value={7}>Secretaria</option>
+                  <option value={8}>Gerente</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-gray-700 text-sm font-bold mb-2">
+                  Estado
+                </label>
+
+                <select
+                  className="border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  aria-label="Default select role"
+                  name="estado"
+                  onChange={formik.handleChange}
+                  value={formik.values.estado}
+                >
+                  <option value="" selected disabled>
+                    Seleccione una opcion
+                  </option>
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+>>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
                 </select>
               </div>
             </div>
