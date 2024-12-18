@@ -13,15 +13,25 @@ export default async function handler(
     // connect to the database
     await dbConnect();
 
-    if (req.method === 'POST') {
+    if (req.method === "POST") {
       // fetch the posts
-      const user = await UserModel.findOne({ userName, password }, { password: 0 });
-
-      if (user !== null) {
-        return res.status(200).json({
-          message: "Bienvenido!",
-          data: user as User,
-          success: true,
+      const user = await UserModel.findOne(
+        { userName, password },
+        { password: 0 }
+      );
+      console.log(user);
+      if (user.estado === "Activo") {
+        if (user !== null) {
+          return res.status(200).json({
+            message: "Bienvenido!",
+            data: user as User,
+            success: true,
+          });
+        }
+      } else {
+        return res.status(404).json({
+          message: "El usuario se encuentra inactivo",
+          success: false,
         });
       }
 
@@ -31,7 +41,7 @@ export default async function handler(
         success: false,
       });
     }
-    throw new Error('Invalid method')
+    throw new Error("Invalid method");
   } catch (error) {
     // return the error
     return res.status(500).json({

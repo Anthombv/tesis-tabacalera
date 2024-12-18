@@ -20,7 +20,7 @@ export default async function handler(
     const filtered = [];
 
     solicitudes.forEach((soli: Solicitude) => {
-      const soliDates = soli.date.replace(",", "").split(" ")[0].split("/");
+      const soliDates = soli.fecha.replace(",", "").split(" ")[0].split("/");
       const soliDate = new Date(
         soliDates[2] +
           "-" +

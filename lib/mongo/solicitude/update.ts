@@ -12,14 +12,7 @@ export default async function handler(
   const role = req.headers.role as string;
 
   const newSolicitude = (): Solicitude => {
-    switch (role) {
-      case "9":
-        return { ...solicitude, applicantDate: FormatedDate() };
-      case "4":
-        return { ...solicitude, financialDate: FormatedDate() };
-      default:
-        return solicitude;
-    }
+    return solicitude;
   };
 
   const resp = await SolicitudeModel.findOneAndUpdate(
