@@ -29,6 +29,8 @@ import FincasModal from "../../../lib/components/modals/fincaModal";
 import TreeTable, { ColumnData } from "../../../lib/components/tree_table";
 import ComentModal from "../../../lib/components/modals/coment";
 import AdminPanel from "../../../lib/layouts/edit_solicitude/administrador";
+import BodegueroPanel from "../../../lib/layouts/edit_solicitude/bodeguero";
+import MullingPanel from "../../../lib/layouts/edit_solicitude/mulling";
 
 export const EditSolicitude = () => {
   const { auth } = useAuth();
@@ -170,21 +172,6 @@ export const EditSolicitude = () => {
     },
   };
 
-  const tabPanels: Array<TabPanel> = [
-    {
-      name: "Solicitantes",
-      content: (
-        <SoliciterPanel sm={12} md={12} lg={6} xl={6} formik={formik} inTabs />
-      ),
-    },
-    {
-      name: "Empacador",
-      content: (
-        <EmpacadorPanel sm={12} md={12} lg={6} xl={6} formik={formik} inTabs />
-      ),
-    },
-  ];
-
   const totalPages = Math.ceil(fincas?.length / ITEMS_PER_PAGE);
   const pageNumbers = [];
 
@@ -316,7 +303,11 @@ export const EditSolicitude = () => {
                     <EmpacadorPanel lg={6} md={6} formik={formik} />
                   ) : CheckPermissions(auth, [3]) ? (
                     <AdminPanel lg={6} md={6} formik={formik} />
-                  ) : null}
+                  ) : CheckPermissions(auth, [4]) ? (
+                    <BodegueroPanel lg={6} md={6} formik={formik} />
+                  ) : CheckPermissions(auth, [5]) ? (
+                    <MullingPanel lg={6} md={6} formik={formik} />
+                  ) :  null}
                 </div>
               </div>
               <div>

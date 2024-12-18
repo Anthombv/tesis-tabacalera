@@ -39,7 +39,7 @@ const FincasModal = (props: Props) => {
     EstadoBodeguero: Pendiente,
     EstadoMulling: Pendiente,
     EstadoSupervisor: Pendiente,
-  })
+  });
   const [initialValues, setInitialValues] = useState<Fincas>(initialFincas);
   const [image, setImage] = useState<File>(null);
 
@@ -59,7 +59,7 @@ const FincasModal = (props: Props) => {
         lote: "",
         variedad: "",
         cantidad: 0,
-        anioCosecha: new Date().getFullYear(),
+        anioCosecha: 0,
         pesoBruto: 0,
         pesoNeto: 0,
         calidad: "",
@@ -98,7 +98,7 @@ const FincasModal = (props: Props) => {
   const loadData = async () => {
     if (Router.asPath !== Router.route) {
       const solicitudeId = Router.query.id as string;
-      
+
       const response: ResponseData = await HttpClient(
         "/api/solicitude/" + solicitudeId,
         "GET",
@@ -106,8 +106,8 @@ const FincasModal = (props: Props) => {
         auth.role
       );
       setSolicitude(response.data);
-      console.log(solicitude)
-      console.log(solicitudeId)
+      console.log(solicitude);
+      console.log(solicitudeId);
     } else {
       setTimeout(loadData, 100);
     }
@@ -132,12 +132,12 @@ const FincasModal = (props: Props) => {
               style={{ color: "#94a3b8" }}
               className="text-center text-xl mb-2 font-semibold"
             >
-              AGREGAR NUEVA FINCA
+              AGREGAR NUEVA CASONA
             </div>
             <hr />
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mb-3">
               <div>
-                {CheckPermissions(auth, [0, 1, 2, 3]) && (
+                {CheckPermissions(auth, [0, 1, 2, 3, 4, 5]) && (
                   <>
                     <label className="text-gray-700 text-sm font-bold mb-2">
                       * Casona
@@ -149,12 +149,13 @@ const FincasModal = (props: Props) => {
                       name="casona"
                       value={formik.values?.casona ?? ""}
                       onChange={formik.handleChange}
+                      disabled={!CheckPermissions(auth, [4])}
                     />
                   </>
                 )}
               </div>
               <div>
-                {CheckPermissions(auth, [0, 1, 2, 3]) && (
+                {CheckPermissions(auth, [0, 1, 2, 3, 4, 5]) && (
                   <>
                     <label className="text-gray-700 text-sm font-bold mb-2">
                       * Aposento
@@ -166,12 +167,13 @@ const FincasModal = (props: Props) => {
                       name="aposento"
                       value={formik.values?.aposento ?? ""}
                       onChange={formik.handleChange}
+                      disabled={!CheckPermissions(auth, [4])}
                     />
                   </>
                 )}
               </div>
               <div>
-                {CheckPermissions(auth, [0, 1, 2, 3]) && (
+                {CheckPermissions(auth, [0, 1, 2, 3, 4, 5]) && (
                   <>
                     <label className="text-gray-700 text-sm font-bold mb-2">
                       * Lote
@@ -183,12 +185,13 @@ const FincasModal = (props: Props) => {
                       name="lote"
                       value={formik.values?.lote ?? ""}
                       onChange={formik.handleChange}
+                      disabled={!CheckPermissions(auth, [4])}
                     />
                   </>
                 )}
               </div>
               <div>
-                {CheckPermissions(auth, [0, 1, 2, 3]) && (
+                {CheckPermissions(auth, [0, 1, 2, 3, 4, 5]) && (
                   <>
                     <label className="text-gray-700 text-sm font-bold mb-2">
                       * Corte
@@ -200,12 +203,13 @@ const FincasModal = (props: Props) => {
                       name="corte"
                       value={formik.values?.corte ?? ""}
                       onChange={formik.handleChange}
+                      disabled={!CheckPermissions(auth, [4])}
                     />
                   </>
                 )}
               </div>
               <div>
-                {CheckPermissions(auth, [0, 1, 2, 3]) && (
+                {CheckPermissions(auth, [0, 1, 2, 3, 4, 5]) && (
                   <>
                     <label className="text-gray-700 text-sm font-bold mb-2">
                       * Variedad
@@ -227,12 +231,14 @@ const FincasModal = (props: Props) => {
 
             <div className="mb-4">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-semibold">Cajas</h3>
+                <h3 className="text-center text-xl mb-2 font-semibold">
+                  Cajas
+                </h3>
                 <button
                   type="button"
                   className="bg-blue-500 text-white px-4 py-2 rounded"
                   onClick={() => {
-                    CheckPermissions(auth, [0, 2])
+                    CheckPermissions(auth, [0, 2, 4])
                       ? addCaja()
                       : toast.info("No tienes permiso para agregar cajas");
                   }}
@@ -254,10 +260,143 @@ const FincasModal = (props: Props) => {
                       <input
                         type="text"
                         name={`cajas[${index}].NumeroDeCaja`}
-                        value={caja.NumeroDeCaja}
+                        value={caja.NumeroDeCaja ?? ""}
                         onChange={formik.handleChange}
+                        disabled={!CheckPermissions(auth, [4])}
                         className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                       />
+                    </div>
+                    <div>
+                      {CheckPermissions(auth, [4, 5]) && (
+                        <>
+                          <label className="text-gray-700 text-sm font-bold mb-2">
+                            * Año de coseña
+                          </label>
+                          <input
+                            className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                            type="number"
+                            placeholder="Año de coseña"
+                            name={`cajas[${index}].anioCosecha`}
+                            value={caja.anioCosecha ?? ""}
+                            onChange={formik.handleChange}
+                            disabled={!CheckPermissions(auth, [4])}
+                          />
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {CheckPermissions(auth, [4, 5]) && (
+                        <>
+                          <label className="text-gray-700 text-sm font-bold mb-2">
+                            * Variedad
+                          </label>
+                          <input
+                            className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                            type="text"
+                            placeholder="Variedad"
+                            name={`cajas[${index}].variedad`}
+                            value={caja.variedad ?? ""}
+                            onChange={formik.handleChange}
+                            disabled={!CheckPermissions(auth, [4])}
+                          />
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {CheckPermissions(auth, [4, 5]) && (
+                        <>
+                          <label className="text-gray-700 text-sm font-bold mb-2">
+                            * Corte
+                          </label>
+                          <input
+                            className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                            type="text"
+                            placeholder="Corte"
+                            name={`cajas[${index}].corte`}
+                            value={caja.corte}
+                            onChange={formik.handleChange}
+                            disabled={!CheckPermissions(auth, [4])}
+                          />
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {CheckPermissions(auth, [4, 5]) && (
+                        <>
+                          <label className="text-gray-700 text-sm font-bold mb-2">
+                            * Lote
+                          </label>
+                          <input
+                            className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                            type="text"
+                            placeholder="Lote"
+                            name={`cajas[${index}].lote`}
+                            value={caja.lote}
+                            onChange={formik.handleChange}
+                            disabled={!CheckPermissions(auth, [4])}
+                          />
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {CheckPermissions(auth, [4, 5]) && (
+                        <>
+                          <label className="text-gray-700 text-sm font-bold mb-2">
+                            * Calidad
+                          </label>
+
+                          <select
+                            className="border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full py-2 px-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            name={`cajas[${index}].calidad`}
+                            value={caja.calidad ?? ""}
+                            onChange={formik.handleChange}
+                            disabled={!CheckPermissions(auth, [4])}
+                          >
+                            <option value="" selected disabled>
+                              Seleccione una opcion
+                            </option>
+                            <option value="Bueno">Bueno</option>
+                            <option value="Mediano">Mediano</option>
+                            <option value="Segunda">Segunda</option>
+                          </select>
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {CheckPermissions(auth, [4, 5]) && (
+                        <>
+                          <label className="text-gray-700 text-sm font-bold mb-2">
+                            * Peso neto (libras)
+                          </label>
+
+                          <input
+                            className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                            type="number"
+                            placeholder="Peso neto"
+                            name={`cajas[${index}].pesoNeto`}
+                            value={caja.pesoNeto}
+                            onChange={formik.handleChange}
+                          />
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {CheckPermissions(auth, [4, 5]) && (
+                        <>
+                          <label className="text-gray-700 text-sm font-bold mb-2">
+                            * Peso bruto (libras)
+                          </label>
+
+                          <input
+                            className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                            type="number"
+                            placeholder="Peso bruto"
+                            name={`cajas[${index}].pesoBruto`}
+                            value={caja.pesoBruto}
+                            onChange={formik.handleChange}
+                          />
+                        </>
+                      )}
                     </div>
                   </div>
                   <button
@@ -301,5 +440,3 @@ const FincasModal = (props: Props) => {
   );
 };
 export default FincasModal;
-
-

@@ -64,6 +64,9 @@ export type Cajas = {
   pesoBruto: number;
   pesoNeto: number;
   calidad: string;
+  corte: string;
+  lote: string;
+  variedad: string;
   valor: number;
 };
 

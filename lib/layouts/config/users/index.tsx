@@ -126,7 +126,7 @@ const UsersPanel = () => {
           paging
           showNavigationButtons
           showNavigationInfo
-          pageSize={15}
+          pageSize={10}
           infoText={(actual, total, items) =>
             `Página ${actual} de ${total} (${items} Usuarios)`
           }

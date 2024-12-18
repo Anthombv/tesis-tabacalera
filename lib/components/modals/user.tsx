@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/use_auth";
 import theme from "../../styles/theme";
 import { User, ModalProps } from "../../types";
+import { toast } from "react-toastify";
 
 const initialUser: User = {
   id: null,
@@ -40,7 +41,33 @@ const UserModal = (props: Props) => {
     validateOnChange: true,
     initialValues,
     onSubmit: async (formData: User) => {
+      if (formData.name === "") {
+        toast.warning("El nombre del traabajador no puede estar vacio");
+        return;
+      }
+
+      if (formData.identificationCard === "") {
+        toast.warning("La cedula o ruc del traabajador no puede estar vacio");
+        return;
+      }
+
+      if (formData.userName === "") {
+        toast.warning("Ingrese un nombre de usuario");
+        return;
+      }
+
+      if (formData.password === "") {
+        toast.warning("Ingrese una contraseña para el usuario");
+        return;
+      }
+
+      if (formData.estado === "") {
+        toast.warning("Seleccione un estado para el usuario");
+        return;
+      }
+
       setLoading(true);
+      console.log(formData);
       await props.onDone(formData);
       setLoading(false);
       handleClose();
@@ -217,8 +244,10 @@ const UserModal = (props: Props) => {
                   name="estado"
                   onChange={formik.handleChange}
                   value={formik.values.estado}
-                  defaultValue="Activo"
                 >
+                  <option value="" selected disabled>
+                    Seleccione una opcion
+                  </option>
                   <option value="Activo">Activo</option>
                   <option value="Inactivo">Inactivo</option>
                 </select>

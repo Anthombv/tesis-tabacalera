@@ -94,6 +94,22 @@ export const SolicitudePage = (props: Props) => {
       alignment: "center",
       cssClass: "bold",
     },
+    {
+      dataField: "EstadoBodeguero",
+      caption: "Bodeguero",
+      cellRender: (params) => <StateField state={params.value ?? Pendiente} />,
+      width: 80,
+      alignment: "center",
+      cssClass: "bold",
+    },
+    {
+      dataField: "EstadoMulling",
+      caption: "Mulling",
+      cellRender: (params) => <StateField state={params.value ?? Pendiente} />,
+      width: 80,
+      alignment: "center",
+      cssClass: "bold",
+    },
   ];
 
   const buttons = {

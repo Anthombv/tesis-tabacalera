@@ -1,19 +1,16 @@
-import { Col, Row, Form } from "react-bootstrap";
+import { Row, Form, Col } from "react-bootstrap";
 import { useAuth } from "../../../hooks/use_auth";
-import { Facture, FormikComponentProps, Solicitude } from "../../../types";
+import { FormikComponentProps, Solicitude } from "../../../types";
 import { CheckFinished } from "../../../utils/check_permissions";
 import {
-  Aprobado,
   Elaborando,
+  Aprobado,
   Pendiente,
-  Procesando,
+  Terminado,
 } from "../../../utils/constants";
-import { useEffect, useState } from "react";
 
 type Props = {
   formik: any;
-  items: Array<Facture>;
-  setItems: React.Dispatch<React.SetStateAction<Facture[]>>;
   sm?: number;
   md?: number;
   lg?: number;
@@ -21,11 +18,10 @@ type Props = {
   inTabs?: boolean;
 };
 
-const FinancialPanel = (props: Props) => {
+const MullingPanel = (props: Props) => {
   const { auth } = useAuth();
   const formik: FormikComponentProps<Solicitude> = props.formik;
   const { sm, md, lg, xl, inTabs } = props;
-
   return (
     <Row className={inTabs ? "justify-content-center" : ""}>
       <Col sm={sm} md={md} lg={lg} xl={xl}>
@@ -33,27 +29,27 @@ const FinancialPanel = (props: Props) => {
           className={inTabs ? "ml-5 mt-3" : ""}
           style={{ color: "black" }}
         >
-          Estado de Financiero
+          Estado de Mulling
         </Form.Label>
         <Form.Select
-          name="financialState"
-          value={formik.values?.financialState}
+          name="EstadoMulling"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          value={formik.values?.EstadoMulling}
           onChange={formik.handleChange}
           disabled={CheckFinished(
             auth,
-            [4],
-            formik.values?.soliciterState,
-            Aprobado
+            [5],
+            formik.values?.EstadoMulling,
+            Terminado
           )}
         >
           <option>Seleccione una opción</option>
-          <option value={Procesando}>Procesando</option>
           <option value={Pendiente}>Pendiente</option>
-          <option value={Aprobado}>Aprobado</option>
+          <option value={Terminado}>Terminado</option>
         </Form.Select>
       </Col>
     </Row>
   );
 };
 
-export default FinancialPanel;
+export default MullingPanel;

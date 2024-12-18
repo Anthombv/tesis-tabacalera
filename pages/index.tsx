@@ -84,6 +84,33 @@ export default function Home() {
                 />
               </p>
             </div>
+            <div className="grid grid-cols-2 gap-4 p-4">
+              <div className="max-w-sm p-6 bg-gray-100 border border-gray-200 rounded-lg shadow">
+                <h2 className="text-center text-lg font-semibold">
+                  Envio de contenedores
+                </h2>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div>
+                    <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300">
+                      Ver solicitudes
+                    </button>
+                  </div>
+                  <div>
+                    <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300">
+                      Ver historial
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="max-w-sm p-6 bg-gray-100 border border-gray-200 rounded-lg shadow">
+                <h2 className="text-center text-lg font-semibold">Reportes</h2>
+                <div className="mt-4">
+                  <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300">
+                    Ver reportes de envios de contenedores
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
