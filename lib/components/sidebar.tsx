@@ -4,12 +4,6 @@ import {
   MdOutlineLogout,
 } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
-<<<<<<< HEAD
-import { FiShoppingCart } from "react-icons/fi";
-import { HiOutlineDocumentReport } from "react-icons/hi";
-import { RiRemoteControlFill } from "react-icons/ri";
-=======
->>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
 import { useAuth } from "../hooks/use_auth";
 import { useCallback, useState } from "react";
 import Router from "next/router";
@@ -17,11 +11,6 @@ import { Disclosure } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { CheckPermissions } from "../utils/check_permissions";
-<<<<<<< HEAD
-import { AiFillProject } from "react-icons/ai";
-=======
-
->>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
 
 const Sidebar = () => {
   const currentYear = new Date().getFullYear();
@@ -62,11 +51,7 @@ const Sidebar = () => {
           </p>
           <div className="flex flex-col justify-start items-center">
             <Image
-<<<<<<< HEAD
-              src="/logo.jpeg"
-=======
               src="/logoempresa.jpeg"
->>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
               alt="Picture of the author"
               width={170}
               height={170}
@@ -98,8 +83,6 @@ const Sidebar = () => {
               </div>
             </div>
 
-<<<<<<< HEAD
-=======
             {CheckPermissions(auth, [1, 2, 3, 4, 5]) && (
               <div className="my-4 border-b border-gray-100 pb-4">
                 <div>
@@ -153,7 +136,6 @@ const Sidebar = () => {
               </div>
             )}
 
->>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
             <div className="my-4">
               <button onClick={handleLogout}>
                 <div className="flex mb-2 justify-start items-center gap-4 px-5 border border-gray-200 hover:bg-gray-900 p-2 rounded-full group cursor-pointer hover:shadow-lg m-auto">

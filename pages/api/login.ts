@@ -13,7 +13,6 @@ export default async function handler(
     // connect to the database
     await dbConnect();
 
-<<<<<<< HEAD
     if (req.method === 'POST') {
       // fetch the posts
       const user = await UserModel.findOne({ userName, password }, { password: 0 });
@@ -23,27 +22,6 @@ export default async function handler(
           message: "Bienvenido!",
           data: user as User,
           success: true,
-=======
-    if (req.method === "POST") {
-      // fetch the posts
-      const user = await UserModel.findOne(
-        { userName, password },
-        { password: 0 }
-      );
-      console.log(user);
-      if (user.estado === "Activo") {
-        if (user !== null) {
-          return res.status(200).json({
-            message: "Bienvenido!",
-            data: user as User,
-            success: true,
-          });
-        }
-      } else {
-        return res.status(404).json({
-          message: "El usuario se encuentra inactivo",
-          success: false,
->>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
         });
       }
 
@@ -53,11 +31,7 @@ export default async function handler(
         success: false,
       });
     }
-<<<<<<< HEAD
     throw new Error('Invalid method')
-=======
-    throw new Error("Invalid method");
->>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
   } catch (error) {
     // return the error
     return res.status(500).json({

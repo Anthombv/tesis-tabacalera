@@ -149,7 +149,7 @@ const FincasModal = (props: Props) => {
                       name="casona"
                       value={formik.values?.casona ?? ""}
                       onChange={formik.handleChange}
-                      disabled={!CheckPermissions(auth, [4])}
+                      disabled={!CheckPermissions(auth, [1])}
                     />
                   </>
                 )}
@@ -167,7 +167,7 @@ const FincasModal = (props: Props) => {
                       name="aposento"
                       value={formik.values?.aposento ?? ""}
                       onChange={formik.handleChange}
-                      disabled={!CheckPermissions(auth, [4])}
+                      disabled={!CheckPermissions(auth, [1])}
                     />
                   </>
                 )}
@@ -185,7 +185,7 @@ const FincasModal = (props: Props) => {
                       name="lote"
                       value={formik.values?.lote ?? ""}
                       onChange={formik.handleChange}
-                      disabled={!CheckPermissions(auth, [4])}
+                      disabled={!CheckPermissions(auth, [1])}
                     />
                   </>
                 )}
@@ -203,7 +203,7 @@ const FincasModal = (props: Props) => {
                       name="corte"
                       value={formik.values?.corte ?? ""}
                       onChange={formik.handleChange}
-                      disabled={!CheckPermissions(auth, [4])}
+                      disabled={!CheckPermissions(auth, [1])}
                     />
                   </>
                 )}
@@ -262,7 +262,7 @@ const FincasModal = (props: Props) => {
                         name={`cajas[${index}].NumeroDeCaja`}
                         value={caja.NumeroDeCaja ?? ""}
                         onChange={formik.handleChange}
-                        disabled={!CheckPermissions(auth, [4])}
+                        disabled={!CheckPermissions(auth, [2, 4])}
                         className="noscroll appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
                       />
                     </div>
@@ -363,7 +363,7 @@ const FincasModal = (props: Props) => {
                       )}
                     </div>
                     <div>
-                      {CheckPermissions(auth, [4, 5]) && (
+                      {CheckPermissions(auth, [5]) && (
                         <>
                           <label className="text-gray-700 text-sm font-bold mb-2">
                             * Peso neto (libras)
@@ -381,7 +381,7 @@ const FincasModal = (props: Props) => {
                       )}
                     </div>
                     <div>
-                      {CheckPermissions(auth, [4, 5]) && (
+                      {CheckPermissions(auth, [5]) && (
                         <>
                           <label className="text-gray-700 text-sm font-bold mb-2">
                             * Peso bruto (libras)

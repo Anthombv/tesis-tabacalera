@@ -1,14 +1,11 @@
 import mongoose, { mongo, Schema } from "mongoose";
 import {
   Auditory,
-<<<<<<< HEAD
-=======
   Backup,
   Cajas,
   Comentario,
   Fincas,
   Solicitude,
->>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
   User,
 } from "../types";
 
@@ -23,10 +20,7 @@ const UserSchema = new mongoose.Schema<User>(
     identificationCard: { type: String },
     dateBirth: { type: String },
     age: { type: Number },
-<<<<<<< HEAD
-=======
     estado: { type: String },
->>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
   },
   { timestamps: true }
 );
@@ -44,8 +38,6 @@ UserSchema.set("toJSON", {
 export const UserModel =
   mongoose.models.Users || mongoose.model("Users", UserSchema);
 
-<<<<<<< HEAD
-=======
 const ComentarioSchema = new mongoose.Schema<Comentario>(
   {
     //Solicitante
@@ -181,7 +173,6 @@ BackupSchema.set("toJSON", {
 export const BackupModel =
   mongoose.models.Backups || mongoose.model("Backups", BackupSchema);
 
->>>>>>> 49fc803892827a301c7d26a029c89d770fccf31e
 const AuditorySchema = new mongoose.Schema<Auditory>(
   {
     date: { type: String },

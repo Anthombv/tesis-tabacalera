@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 
@@ -125,5 +124,3 @@ export default function Home() {
     </>
   );
 }
-=======
->>>>>>> 3d1326343ee0d954b0bfaf35df97f9c9ab61c712
