@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Solicitude } from "../../types";
-import { Aprobado } from "../../utils/constants";
+import { Terminado } from "../../utils/constants";
 import { SolicitudeModel } from "../schemas";
 
 export default async function handler(
@@ -8,7 +8,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const solicitudes = await SolicitudeModel.find({
-    financialState: { $ne: Aprobado },
+    EstadoSupervisor: { $ne: Terminado },
   });
 
   if (req.query.dates !== undefined) {

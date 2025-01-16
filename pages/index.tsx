@@ -13,29 +13,18 @@ export default function Home() {
   const { auth } = useAuth();
   const [modalVisibleGR, setModalVisibleGR] = useState<boolean>(false);
 
-  const showModalGR = () => setModalVisibleGR(true);
-
   const handleSolicitudes = () => {
-    auth.role === 1
-      ? Router.push({ pathname: "/requestsSolicitude" })
+    auth.role === 0
+      ? toast.warning("No puedes acceder aqui")
       : Router.push({ pathname: "/solicitude" });
   };
 
-  const handleHistory = () => {
-    Router.push({ pathname: "/solicitudeHistory" });
+  const handleHistorySolicitudes = () => {
+    auth.role === 0
+      ? toast.warning("No puedes acceder aqui")
+      : Router.push({ pathname: "/solicitude/history" });
   };
 
-  const handleAppReportes = () => {
-    Router.push({ pathname: "/reportes" });
-  };
-
-  const handleAppVentas = () => {
-    Router.push({ pathname: "/ventas" });
-  };
-
-  const handleAppInventario = () => {
-    Router.push({ pathname: "/inventario" });
-  };
   return (
     <>
       <title>Tabacalera</title>
@@ -91,12 +80,15 @@ export default function Home() {
                 </h2>
                 <div className="mt-4 grid grid-cols-2 gap-3">
                   <div>
-                    <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300">
+                    <button
+                      onClick={handleSolicitudes}
+                      className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300"
+                    >
                       Ver solicitudes
                     </button>
                   </div>
                   <div>
-                    <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300">
+                    <button onClick={handleHistorySolicitudes} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300">
                       Ver historial
                     </button>
                   </div>

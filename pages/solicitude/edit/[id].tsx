@@ -1,5 +1,4 @@
 import { useFormik } from "formik";
-import { TabPanel } from "../../../lib/components/tab_container";
 import SoliciterPanel from "../../../lib/layouts/edit_solicitude/soliciter";
 import {
   Cajas,
@@ -21,9 +20,8 @@ import {
   CheckFinishedToMore,
   CheckPermissions,
 } from "../../../lib/utils/check_permissions";
-import { Button, Col, Row, Table } from "react-bootstrap";
-import { FaEdit, FaTrashAlt, FaEye } from "react-icons/fa";
-import CajasModal from "../../../lib/components/modals/cajasModal";
+import { Button, Col, Row } from "react-bootstrap";
+import { FaEdit } from "react-icons/fa";
 import EmpacadorPanel from "../../../lib/layouts/edit_solicitude/empacador";
 import FincasModal from "../../../lib/components/modals/fincaModal";
 import TreeTable, { ColumnData } from "../../../lib/components/tree_table";
@@ -31,6 +29,7 @@ import ComentModal from "../../../lib/components/modals/coment";
 import AdminPanel from "../../../lib/layouts/edit_solicitude/administrador";
 import BodegueroPanel from "../../../lib/layouts/edit_solicitude/bodeguero";
 import MullingPanel from "../../../lib/layouts/edit_solicitude/mulling";
+import SupervisorPanel from "../../../lib/layouts/edit_solicitude/supervisor";
 
 export const EditSolicitude = () => {
   const { auth } = useAuth();
@@ -307,7 +306,9 @@ export const EditSolicitude = () => {
                     <BodegueroPanel lg={6} md={6} formik={formik} />
                   ) : CheckPermissions(auth, [5]) ? (
                     <MullingPanel lg={6} md={6} formik={formik} />
-                  ) :  null}
+                  ) : CheckPermissions(auth, [6]) ? (
+                    <SupervisorPanel lg={6} md={6} formik={formik} />
+                  ) : null}
                 </div>
               </div>
               <div>
@@ -394,67 +395,61 @@ export const EditSolicitude = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        <>
-                          {sortItemsByName()}
-                          {(filterItems() ?? []).map((item, index) => {
-                            return (
-                              <tr
-                                key={index}
-                                className="text-center text-nowrap"
-                              >
-                                <td className="p-1">
-                                  <div className="d-flex justify-content-between">
-                                    <button
-                                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                        {(filterItems() ?? []).map((item, index) => {
+                          return (
+                            <tr key={index} className="text-center text-nowrap">
+                              <td className="p-1">
+                                <div className="d-flex justify-content-between">
+                                  <button
+                                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    style={{
+                                      marginRight: "2px",
+                                      width: "25px",
+                                      height: "25px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                    }}
+                                    onClick={() => buttons.edit(item)}
+                                  >
+                                    <span
                                       style={{
-                                        marginRight: "2px",
-                                        width: "25px",
-                                        height: "25px",
+                                        height: "100%",
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "center",
                                       }}
-                                      onClick={() => buttons.edit(item)}
                                     >
-                                      <span
-                                        style={{
-                                          height: "100%",
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
-                                      >
-                                        <FaEdit />
-                                      </span>
-                                    </button>
-                                  </div>
-                                </td>
-                                {CheckPermissions(
-                                  auth,
-                                  [0, 1, 2, 3, 4, 5, 6, 8]
-                                ) && <td>{item.casona}</td>}
+                                      <FaEdit />
+                                    </span>
+                                  </button>
+                                </div>
+                              </td>
+                              {CheckPermissions(
+                                auth,
+                                [0, 1, 2, 3, 4, 5, 6, 8]
+                              ) && <td>{item.casona}</td>}
 
-                                {CheckPermissions(
-                                  auth,
-                                  [0, 1, 2, 3, 4, 5, 6, 8]
-                                ) && <td>{item.aposento}</td>}
-                                {CheckPermissions(
-                                  auth,
-                                  [0, 1, 2, 3, 4, 5, 6, 8]
-                                ) && <td>{item.corte}</td>}
+                              {CheckPermissions(
+                                auth,
+                                [0, 1, 2, 3, 4, 5, 6, 8]
+                              ) && <td>{item.aposento}</td>}
+                              {CheckPermissions(
+                                auth,
+                                [0, 1, 2, 3, 4, 5, 6, 8]
+                              ) && <td>{item.corte}</td>}
 
-                                {CheckPermissions(
-                                  auth,
-                                  [0, 1, 2, 3, 4, 5, 6, 8]
-                                ) && <td>{item.lote}</td>}
-                                {CheckPermissions(
-                                  auth,
-                                  [0, 1, 2, 3, 4, 5, 6, 8]
-                                ) && <td>{item.variedad}</td>}
-                              </tr>
-                            );
-                          })}
-                        </>
+                              {CheckPermissions(
+                                auth,
+                                [0, 1, 2, 3, 4, 5, 6, 8]
+                              ) && <td>{item.lote}</td>}
+                              {CheckPermissions(
+                                auth,
+                                [0, 1, 2, 3, 4, 5, 6, 8]
+                              ) && <td>{item.variedad}</td>}
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>

@@ -1,45 +1,38 @@
 import { Button } from "react-bootstrap";
-import Sidebar from "../../lib/components/sidebar";
-import { CheckPermissions } from "../../lib/utils/check_permissions";
 import Router from "next/router";
 import { toast } from "react-toastify";
-import LoadingContainer from "../../lib/components/loading_container";
-import TreeTable, { ColumnData } from "../../lib/components/tree_table";
-import { useAuth } from "../../lib/hooks/use_auth";
 import { useEffect, useState } from "react";
-import { Cajas, Fincas, Solicitude } from "../../lib/types";
-import HttpClient from "../../lib/utils/http_client";
-import { StateField } from "../../lib/styles/views/indexStyled";
-import { Pendiente } from "../../lib/utils/constants";
-import ConfirmModal from "../../lib/components/modals/confirm";
+import ConfirmModal from "../../../lib/components/modals/confirm";
+import Sidebar from "../../../lib/components/sidebar";
+import TreeTable, { ColumnData } from "../../../lib/components/tree_table";
+import { useAuth } from "../../../lib/hooks/use_auth";
+import { StateField } from "../../../lib/styles/views/indexStyled";
+import { Solicitude, Cajas } from "../../../lib/types";
+import { CheckPermissions } from "../../../lib/utils/check_permissions";
+import { Pendiente } from "../../../lib/utils/constants";
+import HttpClient from "../../../lib/utils/http_client";
 
 type Props = {
   dates: Array<string>;
-  sm?: number;
-  md?: number;
-  lg?: number;
-  xl?: number;
-  inTabs?: boolean;
 };
 
 export const SolicitudePage = (props: Props) => {
   const { auth } = useAuth();
-  const [tableData, setTableData] = useState<Array<Solicitude>>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [itemToDelete, setItemToDelete] = useState<string>(null);
+  const [tableData, setTableData] = useState<Array<Solicitude>>([]);
+  const [page, setPage] = useState(2);
 
   const loadData = async () => {
     setLoading(true);
 
-    var response = await HttpClient(
-      "/api/solicitude",
+    const response = await HttpClient(
+      "/api/solicitude/history?page=1",
       "GET",
       auth.userName,
       auth.role
     );
 
     const solicitudes: Array<Solicitude> = response.data ?? [];
-    console.log();
     setTableData(solicitudes);
     setLoading(false);
   };
@@ -48,11 +41,6 @@ export const SolicitudePage = (props: Props) => {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.dates]);
 
   const columns: ColumnData[] = [
     {
@@ -122,21 +110,7 @@ export const SolicitudePage = (props: Props) => {
     },
   ];
 
-  const showConfirmModal = (factureId: string) => setItemToDelete(factureId);
-  const hideConfirmModal = () => setItemToDelete(null);
-
   const buttons = {
-    edit: (rowData: Cajas) =>
-      !CheckPermissions(auth, [0, 8])
-        ? Router.push({
-            pathname: "/solicitude/edit/" + (rowData.id as string),
-          })
-        : toast.error("No puedes acceder"),
-    delete: async (rowData: Cajas) => {
-      !CheckPermissions(auth, [0])
-        ? showConfirmModal(rowData.id)
-        : toast.error("No puedes eliminar una Solicitud");
-    },
     download: (rowData: Cajas) =>
       !CheckPermissions(auth, [0])
         ? Router.push({
@@ -146,7 +120,7 @@ export const SolicitudePage = (props: Props) => {
   };
   return (
     <>
-      <title>Envio de contenedor</title>
+      <title>Historial</title>
       <div className="flex h-screen">
         <div className="md:w-1/6 max-w-none">
           <Sidebar />
@@ -160,20 +134,9 @@ export const SolicitudePage = (props: Props) => {
           <div className="bg-white w-5/6 h-5/6 mx-auto">
             <div className="mt-6">
               <p className="md:text-4xl text-xl text-center pt-5 font-extrabold text-yellow-500">
-                Solicitudes de envio de contenedor
+                Historial de contenedores enviados
               </p>
             </div>
-
-            <Button
-              className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-3 text-center mx-2 mb-2 mt-3 dark:focus:ring-yellow-900"
-              onClick={() =>
-                CheckPermissions(auth, [0, 1])
-                  ? Router.push({ pathname: "/solicitude/create" })
-                  : toast.info("No puede ingresar solicitudes")
-              }
-            >
-              Crear Solicitud
-            </Button>
             <div className="p-2">
               <TreeTable
                 keyExpr="id"
@@ -186,7 +149,7 @@ export const SolicitudePage = (props: Props) => {
                 paging
                 showNavigationButtons
                 showNavigationInfo
-                pageSize={15}
+                pageSize={10}
                 infoText={(actual, total, items) =>
                   `Página ${actual} de ${total} (${items} solicitudes)`
                 }
@@ -195,20 +158,6 @@ export const SolicitudePage = (props: Props) => {
           </div>
         </div>
       </div>
-      <ConfirmModal
-        visible={itemToDelete !== null}
-        close={() => setItemToDelete(null)}
-        onDone={async () => {
-          await HttpClient(
-            "/api/solicitude/" + itemToDelete,
-            "DELETE",
-            auth.userName,
-            auth.role
-          );
-          hideConfirmModal();
-          await loadData();
-        }}
-      />
     </>
   );
 };
