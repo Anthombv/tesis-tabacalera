@@ -5,7 +5,6 @@ import Router from "next/router";
 import Sidebar from "../lib/components/sidebar";
 import { useAuth } from "../lib/hooks/use_auth";
 import { toast } from "react-toastify";
-import { CheckPermissions } from "../lib/utils/check_permissions";
 import GeneralReportModal from "../lib/components/modals/generalReport";
 import { useState } from "react";
 
@@ -88,18 +87,13 @@ export default function Home() {
                     </button>
                   </div>
                   <div>
-                    <button onClick={handleHistorySolicitudes} className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300">
+                    <button
+                      onClick={handleHistorySolicitudes}
+                      className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300"
+                    >
                       Ver historial
                     </button>
                   </div>
-                </div>
-              </div>
-              <div className="max-w-sm p-6 bg-gray-100 border border-gray-200 rounded-lg shadow">
-                <h2 className="text-center text-lg font-semibold">Reportes</h2>
-                <div className="mt-4">
-                  <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-yellow-300">
-                    Ver reportes de envios de contenedores
-                  </button>
                 </div>
               </div>
             </div>

@@ -54,20 +54,20 @@ export const SolicitudeCreate = () => {
         fincas: fincas,
       };
       console.log(payload);
-      const response: ResponseData = await HttpClient(
-        "/api/solicitude",
-        "POST",
-        auth.userName,
-        auth.role,
-        payload
-      );
-      if (response.success) {
-        toast.success("Solicitud creada correctamente!");
-      } else {
-        toast.warning(response.message);
-      }
+      //const response: ResponseData = await HttpClient(
+      //  "/api/solicitude",
+      //  "POST",
+      //  auth.userName,
+      //  auth.role,
+      //  payload
+      //);
+      //if (response.success) {
+      //  toast.success("Solicitud creada correctamente!");
+      //} else {
+      //  toast.warning(response.message);
+      //}
       setLoading(false);
-      Router.back();
+      //Router.back();
     },
   });
 

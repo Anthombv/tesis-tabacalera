@@ -41,6 +41,7 @@ const UserModal = (props: Props) => {
     validateOnChange: true,
     initialValues,
     onSubmit: async (formData: User) => {
+      console.log(formData)
       if (formData.name === "") {
         toast.warning("El nombre del traabajador no puede estar vacio");
         return;
@@ -68,9 +69,9 @@ const UserModal = (props: Props) => {
 
       setLoading(true);
       console.log(formData);
-      await props.onDone(formData);
-      setLoading(false);
-      handleClose();
+      //await props.onDone(formData);
+      //setLoading(false);
+      //handleClose();
     },
   });
 
